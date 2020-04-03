@@ -1,0 +1,16 @@
+# set permissions
+xhost +SI:localuser:$USER
+
+# set fallback cursor
+xsetroot -cursor_name left_ptr
+
+# set keyboard repeat rate
+xset r rate 200 60
+
+export VISUAL=emacsclient
+export EDITOR="$VISUAL"
+
+# load resources
+xrdb -load "$XDG_CONFIG_HOME"/X11/Xresources
+
+exec emacs

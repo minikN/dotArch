@@ -1,0 +1,6 @@
+[user]
+	name = Demis Balbach
+	email = demisbalbach@googlemail.com
+	signingKey = 54042381D0B0AC7D
+[commit]
+	gpgSign = true
