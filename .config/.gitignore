@@ -1,2 +1,9 @@
+*
+!*/
+!.gitignore
+!polybar
+!zsh
+!X11
+!git
+!doom
 emacs
-qutebrowser
