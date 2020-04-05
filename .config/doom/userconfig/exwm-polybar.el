@@ -14,13 +14,13 @@
 (defun dw/polybar-exwm-workspace ()
   (pcase exwm-workspace-current-index
     ;;(0 "%{F#f00} WWW%{F-}    TERM    CODE    AGENDA    MUSIC    CHAT")
-    (0 (concat "%{F" THEME_YELLOW "} WWW%{F-}    TERM    CODE    AGENDA    MUSIC    CHAT    GAMES"))
-    (1 (concat " WWW   %{F" THEME_YELLOW "} TERM%{F-}    CODE    AGENDA    MUSIC    CHAT    GAMES"))
-    (2 (concat " WWW    TERM   %{F" THEME_YELLOW "} CODE%{F-}    AGENDA    MUSIC    CHAT    GAMES"))
-    (3 (concat " WWW    TERM    CODE   %{F" THEME_YELLOW "} AGENDA%{F-}    MUSIC    CHAT    GAMES"))
-    (4 (concat " WWW    TERM    CODE    AGENDA   %{F" THEME_YELLOW "} MUSIC%{F-}    CHAT    GAMES"))
-    (5 (concat " WWW    TERM    CODE    AGENDA    MUSIC   %{F" THEME_YELLOW "} CHAT%{F-}    GAMES"))
-    (6 (concat " WWW    TERM    CODE    AGENDA    MUSIC    CHAT   %{F" THEME_YELLOW "} GAMES%{F-}"))))
+    (0 (concat "%{F" THEME_YELLOW "} WWW%{F-}   %{F" THEME_B6 "}%{F-} TERM   %{F" THEME_B6 "}%{F-} CODE   %{F" THEME_B6 "}%{F-} AGENDA   %{F" THEME_B6 "}%{F-} MUSIC   %{F" THEME_B6 "}%{F-} CHAT   %{F" THEME_B6 "}%{F-} GAMES"))
+    (1 (concat "%{F" THEME_B6 "}%{F-} WWW   %{F" THEME_YELLOW "} TERM%{F-}   %{F" THEME_B6 "}%{F-} CODE   %{F" THEME_B6 "}%{F-} AGENDA   %{F" THEME_B6 "}%{F-} MUSIC   %{F" THEME_B6 "}%{F-} CHAT   %{F" THEME_B6 "}%{F-} GAMES"))
+    (2 (concat "%{F" THEME_B6 "}%{F-} WWW   %{F" THEME_B6 "}%{F-} TERM   %{F" THEME_YELLOW "} CODE%{F-}   %{F" THEME_B6 "}%{F-} AGENDA   %{F" THEME_B6 "}%{F-} MUSIC   %{F" THEME_B6 "}%{F-} CHAT   %{F" THEME_B6 "}%{F-} GAMES"))
+    (3 (concat "%{F" THEME_B6 "}%{F-} WWW   %{F" THEME_B6 "}%{F-} TERM   %{F" THEME_B6 "}%{F-} CODE   %{F" THEME_YELLOW "} AGENDA%{F-}   %{F" THEME_B6 "}%{F-} MUSIC   %{F" THEME_B6 "}%{F-} CHAT   %{F" THEME_B6 "}%{F-} GAMES"))
+    (4 (concat "%{F" THEME_B6 "}%{F-} WWW   %{F" THEME_B6 "}%{F-} TERM   %{F" THEME_B6 "}%{F-} CODE   %{F" THEME_B6 "}%{F-} AGENDA   %{F" THEME_YELLOW "} MUSIC%{F-}   %{F" THEME_B6 "}%{F-} CHAT   %{F" THEME_B6 "}%{F-} GAMES"))
+    (5 (concat "%{F" THEME_B6 "}%{F-} WWW   %{F" THEME_B6 "}%{F-} TERM   %{F" THEME_B6 "}%{F-} CODE   %{F" THEME_B6 "}%{F-} AGENDA   %{F" THEME_B6 "}%{F-} MUSIC   %{F" THEME_YELLOW "}%{F-} CHAT   %{F" THEME_B6 "}%{F-} GAMES"))
+    (6 (concat "%{F" THEME_B6 "}%{F-} WWW   %{F" THEME_B6 "}%{F-} TERM   %{F" THEME_B6 "}%{F-} CODE   %{F" THEME_B6 "}%{F-} AGENDA   %{F" THEME_B6 "}%{F-} MUSIC   %{F" THEME_B6 "}%{F-} CHAT   %{F" THEME_YELLOW "} GAMES%{F-}"))))
 
 ;; Hook for Polybar to update workspaces
 (defun dw/send-polybar-hook (name number)
