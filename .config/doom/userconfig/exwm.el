@@ -56,6 +56,9 @@
                      (exwm-reset)
                      (setq exwm-input-line-mode-passthrough nil)))
 
+        ([XF86PowerOff] . db/power-menu)
+        ([XF86Sleep]    . db/power-menu)
+
         ;; enter char-mode again
         ([?\s-i] . exwm-input-release-keyboard)
         ([?\s-f] . exwm-layout-toggle-fullscreen)

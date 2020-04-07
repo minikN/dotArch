@@ -58,6 +58,9 @@
 ;; Set theme colors for ENV
 (load! "userconfig/theme-colors")
 
+;; Power management
+(load! "userconfig/acpi")
+
 ;; Load EXWM and related configs
 (load! "userconfig/exwm")
 (load! "userconfig/exwm-randr")
