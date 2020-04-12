@@ -13,3 +13,6 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 # SSH
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+# GIT
+export GITDIR="$XDG_DATA_HOME/git"
