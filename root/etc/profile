@@ -40,5 +40,5 @@ unset TERMCAP
 unset MANPATH
 
 # Custom PATH
-export PATH="$PATH:$HOME/bin"
+export PATH="$PATH:$XDG_DATA_HOME/bin"
 export PATH="$PATH:$XDG_CONFIG_HOME/emacs/bin"
