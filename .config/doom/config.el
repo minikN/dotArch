@@ -3,6 +3,10 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+;; Determine the environment we are running on.
+(if (string-suffix-p "surface" (car (split-string (shell-command-to-string "uname -r"))))
+    (setq ENV "surface")
+  (setq ENV "desktop"))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -19,7 +23,9 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Cozette" :size 14))
+(if (equal ENV "desktop")
+    (setq doom-font (font-spec :family "Cozette" :size 12))
+  (setq doom-font (font-spec :family "Inconsolata" :size 20)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
