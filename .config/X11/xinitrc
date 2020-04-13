@@ -11,6 +11,6 @@ export VISUAL=emacsclient
 export EDITOR="$VISUAL"
 
 # load resources
-xrdb -load "$XDG_CONFIG_HOME"/X11/Xresources
+xrdb -load "$XDG_CONFIG_HOME"/X11/Xresources &
 
 exec emacs
