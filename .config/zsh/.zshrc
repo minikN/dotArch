@@ -1,3 +1,6 @@
+# Colors
+autoload -U colors && colors
+
 # Lines configured by zsh-newuser-install
 HISTFILE="$XDG_DATA_HOME"/zsh/history
 HISTSIZE=1000
@@ -13,6 +16,9 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-
+# Includes
 source "$ZDOTDIR/exports.zsh"
 source "$ZDOTDIR/aliases.zsh"
+
+# Syntax highlighting (last)
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
