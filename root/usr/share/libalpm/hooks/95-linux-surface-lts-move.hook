@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux-surface-lts
+
+[Action]
+Description = Move kernel to new local after installation
+When = PostTransaction
+Exec = /usr/bin/mv /boot/vmlinuz-linux-surface-lts /boot/initramfs-linux-surface-lts.img /boot/initramfs-linux-surface-lts-fallback.img /boot/EFI/arch/.
