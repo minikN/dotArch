@@ -4,7 +4,7 @@
 ;; sync' after modifying this file!
 
 ;; Determine the environment we are running on.
-(if (string-suffix-p "surface" (car (split-string (shell-command-to-string "uname -r"))))
+(if (string-match "surface" (car (split-string (shell-command-to-string "uname -r"))))
     (setq ENV "surface")
   (setq ENV "desktop"))
 
