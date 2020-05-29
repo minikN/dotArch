@@ -21,6 +21,6 @@ if [ -d /etc/profile.d ]; then
 fi
 
 # Custom PATH
-export ZDORDIR="$HOME/.config/zsh" 
+export ZDOTDIR="$HOME/.config/zsh" 
 export PATH="$PATH:$XDG_DATA_HOME/bin"
 export PATH="$PATH:$XDG_CONFIG_HOME/emacs/bin"
