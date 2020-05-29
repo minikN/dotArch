@@ -4,15 +4,9 @@
 !doom/
 !doom/**
 
-!polybar/
-!polybar/**
-
 !zsh/
 !zsh/**
 zsh/.zcompdump
 
 !git/
 !git/**
-
-!X11/
-!X11/**
