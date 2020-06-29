@@ -4,9 +4,7 @@
 ;; sync' after modifying this file!
 
 ;; Determine the environment we are running on.
-(if (string-match "surface" (car (split-string (shell-command-to-string "uname -r"))))
-    (setq ENV "surface")
-  (setq ENV "desktop"))
+(load! "userconfig/env")
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -23,14 +21,13 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(if (equal ENV "desktop")
+(if (equal ENV "linux")
     (setq doom-font (font-spec :family "Cozette" :size 12))
-  (setq doom-font (font-spec :family "Inconsolata" :size 20)))
+  (setq doom-font (font-spec :family "Inconsolata" :size 18)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;;(setq doom-theme 'doom-molokai)
 (setq doom-theme 'doom-monokai-spectrum)
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -64,13 +61,16 @@
 ;; Set theme colors for ENV
 (load! "userconfig/theme-colors")
 
-;; Power management
-(load! "userconfig/acpi")
+;; Linux specific config
+(if (equal ENV "linux")
+    (progn
+      ;; ;; Power management
+      (load! "userconfig/acpi")
 
-;; Load EXWM and related configs
-(load! "userconfig/exwm")
-(load! "userconfig/exwm-randr")
-(load! "userconfig/exwm-polybar")
+      ;; ;; Load EXWM and related configs
+      (load! "userconfig/exwm")
+      (load! "userconfig/exwm-randr")
+      (load! "userconfig/exwm-polybar")))
 
 ;; Configure windows
 (load! "userconfig/windows")
@@ -86,26 +86,3 @@
 
 ;; Setup org mode
 (load! "userconfig/org-mode")
-
-;; (defvar *image-directory* "/home/demis/screenshots")
-
-;; (defun screenshot (&optional crop)
-;;   "Takes screenshots and opens the folder in Dired"
-;;   (interactive "p")
-;;   (let* ((image-capture-program (if (= current-prefix-arg 0) "maim -s" "maim"))
-;;      (sleep-seconds (if (and current-prefix-arg (not (zerop current-prefix-arg)))
-;;             current-prefix-arg 0))
-;;      (image-type ".png")
-;;      (year (format-time-string "%Y"))
-;;      (month (format-time-string "%m"))
-;;      (date (format-time-string "%Y-%d-%m"))
-;;      (directory (concat *image-directory* "/" year "/" month "/" date))
-;;      (filename (concat directory "/" (format-time-string "%Y-%d-%m-%T") image-type))
-;;      (command (concat image-capture-program " \"" filename "\"")))
-;;     (make-directory directory t)
-;;     (sleep-for sleep-seconds)
-;;     (shell-command command)
-;;     (find-file-other-window directory)
-;;     (revert-buffer)))
-
-;; (global-set-key (kbd "<print>") 'screenshot)
