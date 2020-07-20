@@ -1,8 +1,0 @@
-*
-!.gitignore
-
-!polybar/
-!polybar/**
-
-!X11/
-!X11/**

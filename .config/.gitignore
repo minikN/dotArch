@@ -10,3 +10,9 @@ zsh/.zcompdump
 
 !git/
 !git/**
+
+!polybar/
+!polybar/**
+
+!X11/
+!X11/**

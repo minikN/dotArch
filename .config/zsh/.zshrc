@@ -1,3 +1,7 @@
+# Includes
+source "$ZDOTDIR/exports.zsh"
+source "$ZDOTDIR/aliases.zsh"
+
 # Colors
 autoload -U colors && colors
 
@@ -16,9 +20,5 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-# Includes
-source "$ZDOTDIR/exports.zsh"
-source "$ZDOTDIR/aliases.zsh"
-
 # Syntax highlighting (last)
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2> /dev/null
