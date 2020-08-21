@@ -1,6 +1,8 @@
 [user]
 	name = Demis Balbach
 	email = demisbalbach@googlemail.com
-	signingKey = 51E841AF5D7222DE 
+	signingKey = F17DDB98CC3C405C
 [commit]
 	gpgSign = true
+[gpg]
+	program = gpg2
