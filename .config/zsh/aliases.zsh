@@ -8,3 +8,8 @@ alias gpg2="gpg2 --homedir ${GNUPGHOME}"
 
 # ls
 alias lss="ls --group-directories-first --color=always -laAhU"
+
+# git
+function gc {
+	git clone "$1" "$GITDIR/$(basename $1 .git)"
+}
