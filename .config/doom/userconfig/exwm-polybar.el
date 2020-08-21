@@ -7,7 +7,7 @@
   (interactive)
   (if (equal ENV "surface")
       (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-single.ini single")
-    (start-process-shell-command "polybar" "*polybar*" "polybar left & polybar right")))
+    (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-single.ini single")))
 
 ;;(db/start-polybar)
 (advice-add 'enable-theme :after #'db/start-polybar)
