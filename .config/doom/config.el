@@ -86,3 +86,6 @@
 
 ;; Setup org mode
 (load! "userconfig/org-mode")
+
+;; ivy-posframe
+;(load! "userconfig/ivy-posframe")
