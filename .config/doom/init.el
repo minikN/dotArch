@@ -175,7 +175,6 @@
        ;;notmuch
        ;;(wanderlust +gmail)
 
-
        :app
        ;;calendar
        irc                   ; how neckbeards socialize
