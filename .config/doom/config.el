@@ -89,3 +89,6 @@
 
 ;; ivy-posframe
 ;(load! "userconfig/ivy-posframe")
+
+;; Let's take some screenshots
+(load! "userconfig/screenshot")
