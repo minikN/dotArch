@@ -10,6 +10,7 @@
     (setq action (completing-read "Take screenshot of ..." actions )
           target (completing-read "Save screenshot ..." targets ))
     (setq result (db/screenshot-return-cmd action target tmp-file ext))
+    (sit-for 0)
     (call-process-shell-command (nth 1 result) nil nil nil)
     (cond ((equal target "Locally")
            (message (concat "Image saved to: " (nth 0 result))))
