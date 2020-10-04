@@ -13,4 +13,4 @@ export EDITOR="$VISUAL"
 # load resources
 xrdb -load "$XDG_CONFIG_HOME"/X11/Xresources &
 
-exec emacs
+exec dbus-run-session emacs
