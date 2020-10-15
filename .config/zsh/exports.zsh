@@ -15,11 +15,6 @@ if test -z "${XDG_RUNTIME_DIR}"; then
 		chmod 0700 "${XDG_RUNTIME_DIR}"
 	fi
  fi
- 
-# Xorg
-export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
-export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
-export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
 # Emacs
 export EMACS_USER_DIRECTORY="$XDG_CONFIG_HOME/emacs"
@@ -28,11 +23,13 @@ export EMACS_USER_DIRECTORY="$XDG_CONFIG_HOME/emacs"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 # SSH
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+export SSH_AUTH_SOCK_WSL="$HOME/.ssh/agent.sock"
+export SSH_AUTH_SOCK_LINUX=$(gpgconf --list-dirs agent-ssh-socket)
 
-# GIT
+# DIRS
 export GITDIR="$XDG_DATA_HOME/git"
+export BINDIR="$XDG_DATA_HOME/bin"
 
 # Adding to PATH
-export PATH="$PATH:$XDG_DATA_HOME/bin"
-export PATH="$PATH:$XDG_CONFIG_HOME/emacs/bin"
+export PATH="$XDG_DATA_HOME/bin:$PATH"
+export PATH="$XDG_CONFIG_HOME/emacs/bin:$PATH"

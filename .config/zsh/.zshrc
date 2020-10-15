@@ -1,6 +1,24 @@
-# Includes
+# Common configuration
+## Includes
 source "$ZDOTDIR/exports.zsh"
 source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/prompt.zsh"
+
+## Functions
+for file in $ZDOTDIR/functions/*; do
+    source "$file"
+done
+
+# Environment specific configuration
+if [[ ! -z "$WSLENV" ]]; then
+    source "$ZDOTDIR/wsl/exports.zsh"
+    source "$ZDOTDIR/wsl/aliases.zsh"
+    source "$ZDOTDIR/wsl/functions.zsh"
+else
+    source "$ZDOTDIR/linux/exports.zsh"
+    source "$ZDOTDIR/linux/aliases.zsh"
+    source "$ZDOTDIR/linux/functions.zsh"
+fi
 
 # Colors
 autoload -U colors && colors

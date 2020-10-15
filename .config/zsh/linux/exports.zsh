@@ -1,0 +1,7 @@
+# SSH
+export SSH_AUTH_SOCK="$SSH_AUTH_SOCK_LINUX"
+
+# Xorg
+export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
+export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
+export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
