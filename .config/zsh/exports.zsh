@@ -25,6 +25,7 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 # SSH
 export SSH_AUTH_SOCK_WSL="$HOME/.ssh/agent.sock"
 export SSH_AUTH_SOCK_LINUX=$(gpgconf --list-dirs agent-ssh-socket)
+export SSH_AUTH_SOCK="$SSH_AUTH_SOCK_LINUX"
 
 # DIRS
 export GITDIR="$XDG_DATA_HOME/git"

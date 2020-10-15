@@ -2,7 +2,6 @@
 
 export WSL_DISPLAY="$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0.0"
 export WORKDIR="$(wslpath $(wslvar USERPROFILE))/code" # requires wslu
-export SSH_AUTH_SOCK="$SSH_AUTH_SOCK_WSL"
 
 # Fonts
 [[ ! -d "$HOME/.fonts/windows" ]] && mkdir -p "$HOME/.fonts/windows" && ln -s /mnt/c/Windows/Fonts/ ~/.fonts/windows && fc-cache -f

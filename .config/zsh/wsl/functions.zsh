@@ -12,9 +12,9 @@ function isWinDir {
 function git {
   if isWinDir
   then
-    SSH_AUTH_SOCK="$SSH_AUTH_SOCK_WSL" git.exe "$@"
+    git.exe "$@"
   else
-    SSH_AUTH_SOCK="$SSH_AUTH_SOCK_LINUX" /usr/bin/git "$@"
+    /usr/bin/git "$@"
   fi
 }
 
