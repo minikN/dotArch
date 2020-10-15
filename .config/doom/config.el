@@ -23,7 +23,7 @@
 ;; font string. You generally only need these two:
 (if (equal ENV "linux")
     (setq doom-font (font-spec :family "Cozette" :size 12))
-  (setq doom-font (font-spec :family "Inconsolata" :size 18)))
+  (setq doom-font (font-spec :family "Cascadia Mono" :size 14)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -70,7 +70,10 @@
       ;; ;; Load EXWM and related configs
       (load! "userconfig/exwm")
       (load! "userconfig/exwm-randr")
-      (load! "userconfig/exwm-polybar")))
+      (load! "userconfig/exwm-polybar")
+
+      ;; Let's take some screenshots
+      (load! "userconfig/screenshot")))
 
 ;; Configure windows
 (load! "userconfig/windows")
@@ -89,6 +92,3 @@
 
 ;; ivy-posframe
 ;(load! "userconfig/ivy-posframe")
-
-;; Let's take some screenshots
-(load! "userconfig/screenshot")
