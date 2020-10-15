@@ -5,7 +5,7 @@ sudo apt update && sudo apt install -y wget git zsh zsh-syntax-highlighting libg
 ```
 # Compiling Emacs 27
 
-``` shell
+```shell
 cd ~
 git clone -b emacs-27 --depth 1 git://git.sv.gnu.org/emacs.git
 cd emacs
