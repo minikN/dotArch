@@ -54,8 +54,9 @@
 (load! "userconfig/env")
 
 (if (equal ENV "linux")
-    (package! exwm)
-    (package! bluetooth))
+    (progn (package! exwm)
+           (package! bluetooth)
+           (package! pulseaudio-control)))
 
 (package! pinentry)
 (package! lsp-docker)
