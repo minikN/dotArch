@@ -58,6 +58,10 @@
 
 ;; Userconfig starts here
 
+;; make ivy/switch-workspace-buffer list all buffers
+(after! persp-mode
+  (remove-hook 'persp-add-buffer-on-after-change-major-mode-filter-functions #'doom-unreal-buffer-p))
+
 ;; Set theme colors for ENV
 (load! "userconfig/theme-colors")
 
