@@ -50,10 +50,12 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
-(package! pinentry)
+;; Determine the enviroment we are running on.
+(load! "userconfig/env")
 
 (if (equal ENV "linux")
-    ;; EXWM
     (package! exwm)
-    ;; bluetooth
     (package! bluetooth))
+
+(package! pinentry)
+(package! lsp-docker)
