@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+GIT_DIR="$HOME/git"
+VOID_DIR="$GIT_DIR/void-packages"
+VOID_REPO="https://github.com/void-linux/void-packages"
+
+# Check dependencies
+[ -x "$(command -v git)" ] || sudo xbps-install -Ay git > /dev/null
+[ -x "$(command -v xi)" ] || sudo xbps-install -Ay xtools > /dev/null
+
+# Creating git dir
+[ -d $GIT_DIR ] || mkdir $GIT_DIR
+
+# Inizializing void-packages if necessary
+[ ! -d "$GIT_DIR/void-packages" ] &&
+    echo "Cloning void-packages to $VOID_DIR (This may take a while) ..." &&
+    git clone -q $VOID_REPO $VOID_DIR &&
+
+    echo "Running xbps-src binary-bootstrap (This may take a while) ..." &&
+    bash $VOID_DIR/xbps-src binary-bootstrap > /dev/null &&
+
+    echo "Adding XBPS_ALLOW_RESTRICTED=yes to etc/conf ..." &&
+    echo "XBPS_ALLOW_RESTRICTED=yes" >> $VOID_DIR/etc/conf
+
+# install procedure
+install_pkg() {
+    echo "Building $1 (This may take a while) ..."
+    bash $VOID_DIR/xbps-src pkg "$1" > /dev/null || exit 1
+
+    echo "Installing $1 ..."
+    cd $VOID_DIR
+    sudo xi -Ay $1 > /dev/null || exit 1
+
+    echo "$1 installed successfully."
+}
+
+# update void-packages repo
+update_void() {
+    echo "Updating void-packages ..."
+    cd $VOID_DIR
+    git pull > /dev/null
+}
+
+#check if already installed
+already_installed() {
+    if [ ! -z "$(xbps-query $1)" ]; then echo "$1 is already installed." && exit 0; fi
+}
+
+[ ! -z $1 ] && already_installed $1 && update_void && install_pkg $1
