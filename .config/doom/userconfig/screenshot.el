@@ -24,7 +24,6 @@
   (let ((cmd ""))
     (cond ((equal source "Section")
            (cond ((equal target "Locally")
-                  (print "section local")
                   (setq tmp-file (concat (read-directory-name "Select directory: " "~/") (read-string "File name (Without extension): ") "." ext))
                   (setq cmd (concat "maim -u -s " tmp-file)))
                  ((equal target "Imgur")
