@@ -56,7 +56,9 @@
 (if (equal ENV "linux")
     (progn (package! exwm)
            (package! bluetooth)
-           (package! pulseaudio-control)))
+           (package! pulseaudio-control)
+           (package! imgur
+             :recipe (:host github :repo "minikN/imgur.el"))))
 
 (package! pinentry)
 (package! lsp-docker)
