@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-GIT_DIR="$HOME/git"
-VOID_DIR="$GIT_DIR/void-packages"
+VOID_DIR="$GITDIR/void-packages"
 VOID_REPO="https://github.com/void-linux/void-packages"
 
 # Check dependencies
