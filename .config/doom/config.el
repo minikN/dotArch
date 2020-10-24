@@ -86,7 +86,7 @@
 (load! "userconfig/lsp")
 
 ;; IRC
-;(load! "userconfig/irc")
+(load! "userconfig/irc")
 
 ;; Setup Pinentry for GPG and SSH
 (load! "userconfig/pinentry")
