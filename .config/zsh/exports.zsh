@@ -37,3 +37,6 @@ export PATH="$XDG_CONFIG_HOME/emacs/bin:$PATH"
 
 # CUDA
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
+
+# pass
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
