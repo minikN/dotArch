@@ -12,3 +12,6 @@ alias mailserver="SSH_AUTH_SOCK="$SSH_AUTH_SOCK_LINUX" ssh -p 22 root@195.201.20
 
 # qutebrowser
 alias qutebrowser="qutebrowser -R"
+
+# next browser
+alias next="next --session nil"
