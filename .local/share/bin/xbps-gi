@@ -1,48 +1,101 @@
 #!/usr/bin/env bash
+set -e
+set -o pipefail
 
 VOID_DIR="$GITDIR/void-packages"
 VOID_REPO="https://github.com/void-linux/void-packages"
 
-# Check dependencies
-[ -x "$(command -v git)" ] || sudo xbps-install -Ay git > /dev/null
-[ -x "$(command -v xi)" ] || sudo xbps-install -Ay xtools > /dev/null
+exec_cmd() {
+    ${1} 2>&1 | while IFS= read -r line; do
+        echo "==> $line"
+    done
+}
 
-# Creating git dir
-[ -d $GIT_DIR ] || mkdir $GIT_DIR
+check_deps() {
+    if ! command -v "${2}" &> /dev/null; then
 
-# Inizializing void-packages if necessary
-[ ! -d "$GIT_DIR/void-packages" ] &&
-    echo "Cloning void-packages to $VOID_DIR (This may take a while) ..." &&
-    git clone -q $VOID_REPO $VOID_DIR &&
+        echo -n "=> ${1} is not installed. Install now? (y/N) "
+        read y
+        if [ "${y}" == "y" ]; then
+            echo "=> Running sudo xbps-install ${1}. -Ay now"
+            exec_cmd "sudo xbps-install ${1} -Ay"
+        else
+            echo "=> User aborted."
+            exit 0
+        fi
+    fi
+}
 
-    echo "Running xbps-src binary-bootstrap (This may take a while) ..." &&
-    bash $VOID_DIR/xbps-src binary-bootstrap > /dev/null &&
+init_config() {
+        echo -n "=> Add XBPS_ALLOW_RESTRICTED=yes to ${VOID_DIR}/etc/conf? (y/N) "
 
-    echo "Adding XBPS_ALLOW_RESTRICTED=yes to etc/conf ..." &&
-    echo "XBPS_ALLOW_RESTRICTED=yes" >> $VOID_DIR/etc/conf
+        read y
+        if [ "${y}" == "y" ]; then
+            echo "=> Running XBPS_ALLOW_RESTRICTED=\"yes\" > ${VOID_DIR}/etc/conf now"
+            echo "XBPS_ALLOW_RESTRICTED=yes" > "${VOID_DIR}/etc/conf"
+        fi
+}
+init_binary() {
+        echo -n "=> Run xbps-src binary-bootstrap now? (y/N) "
 
-# install procedure
+        read y
+        if [ "${y}" == "y" ]; then
+            echo "=> Running ${VOID_DIR}/xbps-src binary-bootstrap now"
+            exec_cmd "${VOID_DIR}/xbps-src binary-bootstrap || exit 1"
+            init_config
+        else
+            echo "=> User aborted."
+            exit 0;
+        fi
+}
+
+init_repo() {
+    echo "=> ${VOID_DIR} does not exist"
+    echo -n "=> Clone ${VOID_REPO} in ${VOID_DIR} now? (y/N) "
+
+    read y
+    if [ "${y}" == "y" ]; then
+        echo "=> Running git clone ${VOID_REPO} ${VOID_DIR} now"
+        git clone $VOID_REPO $VOID_DIR
+        init_binary
+    else
+        echo "=> User aborted."
+        exit 0;
+    fi
+}
+
+update_repo() {
+    echo "=> Pulling void-packages ..."
+    echo "=> Running git pull"
+    cd ${VOID_DIR}
+    exec_cmd "git pull"
+}
+
+build_pkg() {
+    echo "=> Building ${1} ..."
+    echo "=> Running ${VOID_DIR}/xbps-src pkg ${1}"
+    exec_cmd "${VOID_DIR}/xbps-src pkg ${1}" || exit 1
+}
+
 install_pkg() {
-    echo "Building $1 (This may take a while) ..."
-    bash $VOID_DIR/xbps-src pkg "$1" > /dev/null || exit 1
-
-    echo "Installing $1 ..."
-    cd $VOID_DIR
-    sudo xi -Ay $1 > /dev/null || exit 1
-
-    echo "$1 installed successfully."
+    update_repo
+    build_pkg ${1}
+    echo "=> Installing ${1} ..."
+    echo "=> Running sudo xi -Ay ${1}"
+    exec_cmd "sudo xi -Ay ${1}"
+    echo "=> Installed ${1}."
 }
 
-# update void-packages repo
-update_void() {
-    echo "Updating void-packages ..."
-    cd $VOID_DIR
-    git pull > /dev/null
-}
+check_deps git git
+check_deps xtools xi
 
-#check if already installed
-already_installed() {
-    if [ ! -z "$(xbps-query $1)" ]; then echo "$1 is already installed." && exit 0; fi
-}
+if [ ! -d "$GITDIR" ]; then
+    echo "=> $GITDIR doesn't exist. Exiting."
+fi
 
-[ ! -z $1 ] && already_installed $1 && update_void && install_pkg $1
+
+if [ ! -d "${VOID_DIR}" ]; then
+    init_repo
+fi
+
+install_pkg ${1}
