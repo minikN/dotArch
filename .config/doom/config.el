@@ -85,6 +85,9 @@
 ;; Configure lsp and lsp-ui
 (load! "userconfig/lsp")
 
+;; Flycheck
+(load! "userconfig/flycheck")
+
 ;; IRC
 (load! "userconfig/irc")
 
