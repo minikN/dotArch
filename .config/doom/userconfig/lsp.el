@@ -4,19 +4,14 @@
 (setq lsp-ui-peek-list-width 100)
 (setq lsp-ui-imenu-enable t)
 (setq lsp-ui-peek-fontify 'always)
+(setq lsp-auto-guess-root nil)
 
 ;; Docker
-(defvar lsp-docker-path-mappings
+(setq lsp-docker-container-name "lsp-langserver")
+(setq lsp-docker-image-name lsp-docker-container-name)
+(setq lsp-docker-path-mappings
   '(("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
-    ("/home/demis/test-repo" . "/projects/test-repo")
-    ("/home/demis/.local/share/git/lsp-langserver" . "/projects/lsp-langserver"))
-  "All the available project mappings for the container.")
-
-(defvar lsp-docker-container-name "lsp-langserver"
-  "The name of the docker container without suffix.")
-
-(defvar lsp-docker-image-name lsp-docker-container-name
-  "The name of the docker image.")
+    ("/home/demis/.local/share/git/lsp-langserver" . "/projects/lsp-langserver")))
 
 (defun db/get-docker-path (path-mappings project-root)
   "Returns the path inside a docker container
