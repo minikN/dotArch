@@ -40,7 +40,7 @@
                     (list :server-id 'dockerfile-ls :docker-server-id 'dockerfilels-docker :server-command "docker-langserver --stdio"))
    :path-mappings lsp-docker-path-mappings))
 
-;;; After lsp-docker, lets configure some new flycheck checkers and enable them.
+;; After lsp-docker, lets configure some new flycheck checkers and enable them.
 (after! lsp-docker
 
   ;;; Checker for shell, bash
@@ -75,9 +75,9 @@
             (url "https://github.com/koalaman/shellcheck/wiki/%S"))
         (and error-code `(url . ,(format url error-code))))))
 
+  ;;; Checker for zsh
   (flycheck-define-checker sh-zsh-docker
   "sh-zsh with docker support."
-  ;:command ("zsh" "--no-exec" "--no-globalrcs" "--no-rcs" source)
   :command ("docker" "exec" "-i"
               (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
               "zshwrapper" (eval (db/get-docker-path lsp-docker-path-mappings (projectile-project-root)))
@@ -94,5 +94,3 @@
     (add-to-list 'flycheck-checkers 'sh-zsh-docker)
     (add-to-list 'flycheck-disabled-checkers 'lsp)
     (setq flycheck-checker 'sh-shellcheck-docker)))
-
-;; (db/get-real-path lsp-docker-path-mappings (projectile-project-root))
