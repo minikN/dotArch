@@ -11,6 +11,9 @@ zsh/.zcompdump
 !git/
 !git/**
 
+!npm/
+!npm/**
+
 !polybar/
 !polybar/**
 

@@ -40,3 +40,6 @@ export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
 
 # pass
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
+
+# npm
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
