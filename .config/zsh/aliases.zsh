@@ -3,8 +3,11 @@
 # GnuPG
 alias gpg2="gpg2 --homedir ${GNUPGHOME}"
 
-# ls
-alias lss="ls --group-directories-first --color=always -laAhU"
+# Navigation
+alias lss="ls --group-directories-first --color=always -laAh"
+alias ..="cd .."
+alias ...="cd ../../"
+alias ....="cd ../../../"
 
 # ssh
 alias elftower="SSH_AUTH_SOCK="$SSH_AUTH_SOCK_LINUX" ssh -p 22200 demis@116.203.110.209"
