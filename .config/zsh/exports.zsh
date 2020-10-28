@@ -43,3 +43,6 @@ export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
 
 # npm
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
+
+# docker
+export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
