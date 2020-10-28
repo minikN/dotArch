@@ -15,7 +15,7 @@ check_deps() {
     if ! command -v "${2}" &> /dev/null; then
 
         echo -n "=> ${1} is not installed. Install now? (y/N) "
-        read y
+        read -r y
         if [ "${y}" == "y" ]; then
             echo "=> Running sudo xbps-install ${1}. -Ay now"
             exec_cmd "sudo xbps-install ${1} -Ay"
@@ -29,7 +29,7 @@ check_deps() {
 init_config() {
         echo -n "=> Add XBPS_ALLOW_RESTRICTED=yes to ${VOID_DIR}/etc/conf? (y/N) "
 
-        read y
+        read -r y
         if [ "${y}" == "y" ]; then
             echo "=> Running XBPS_ALLOW_RESTRICTED=\"yes\" > ${VOID_DIR}/etc/conf now"
             echo "XBPS_ALLOW_RESTRICTED=yes" > "${VOID_DIR}/etc/conf"
@@ -38,7 +38,7 @@ init_config() {
 init_binary() {
         echo -n "=> Run xbps-src binary-bootstrap now? (y/N) "
 
-        read y
+        read -r y
         if [ "${y}" == "y" ]; then
             echo "=> Running ${VOID_DIR}/xbps-src binary-bootstrap now"
             exec_cmd "${VOID_DIR}/xbps-src binary-bootstrap || exit 1"
@@ -53,10 +53,10 @@ init_repo() {
     echo "=> ${VOID_DIR} does not exist"
     echo -n "=> Clone ${VOID_REPO} in ${VOID_DIR} now? (y/N) "
 
-    read y
+    read -r y
     if [ "${y}" == "y" ]; then
         echo "=> Running git clone ${VOID_REPO} ${VOID_DIR} now"
-        git clone $VOID_REPO $VOID_DIR
+        git clone "$VOID_REPO" "$VOID_DIR"
         init_binary
     else
         echo "=> User aborted."
@@ -67,7 +67,7 @@ init_repo() {
 update_repo() {
     echo "=> Pulling void-packages ..."
     echo "=> Running git pull"
-    cd ${VOID_DIR}
+    cd "$VOID_DIR"
     exec_cmd "git pull"
 }
 
@@ -79,7 +79,7 @@ build_pkg() {
 
 install_pkg() {
     update_repo
-    build_pkg ${1}
+    build_pkg "$1"
     echo "=> Installing ${1} ..."
     echo "=> Running sudo xi -Ay ${1}"
     exec_cmd "sudo xi -Ay ${1}"
@@ -98,4 +98,4 @@ if [ ! -d "${VOID_DIR}" ]; then
     init_repo
 fi
 
-install_pkg ${1}
+install_pkg "$1"
