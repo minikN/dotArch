@@ -18,3 +18,10 @@ alias qutebrowser="qutebrowser -R"
 
 # next browser
 alias next="next --session nil"
+
+# docker
+alias d-stp="docker stop $(docker ps -aq)"
+alias d-rmc="docker rm $(docker ps -aq)"
+alias d-rmv="docker volume rm $(docker volume ls -q)"
+alias d-rmi="docker rmi $(docker images -q)"
+alias d-all="d-stp; d-rmc; d-rmv; d-rmi"
