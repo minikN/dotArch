@@ -1,18 +1,16 @@
 ;;; ~/.doom.d/userconfig/lsp.el -*- lexical-binding: t; -*-
 
 ;; Generic settings
-(setq lsp-ui-peek-list-width 100)
-(setq lsp-ui-imenu-enable t)
-(setq lsp-ui-peek-fontify 'always)
-(setq lsp-auto-guess-root nil)
+(after! lsp-mode
+  (setq lsp-auto-guess-root nil))
+
+(after! lsp-ui
+  (setq lsp-ui-peek-list-width 100
+        lsp-ui-peek-fontify 'always
+        lsp-ui-imenu-enable t
+        imenu-auto-rescan t))
 
 ;; Docker
-(setq lsp-docker-container-name "lsp-langserver")
-(setq lsp-docker-image-name lsp-docker-container-name)
-(setq lsp-docker-path-mappings
-  '(("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
-    ("/home/demis/.local/share/git/lsp-langserver" . "/projects/lsp-langserver")))
-
 (defun db/get-docker-path (path-mappings project-root)
   "Returns the path inside a docker container
   for a given file using lsp-docker-path-mappings"
@@ -25,6 +23,12 @@
 ;;; Configure and initialize lsp-docker with the settings above.
 (use-package! lsp-docker
   :config
+  (setq lsp-docker-container-name "lsp-langserver"
+        lsp-docker-image-name lsp-docker-container-name
+        lsp-docker-path-mappings
+        '(("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
+          ("/home/demis/.local/share/git/laravel2" . "/projects/laravel2")
+          ("/home/demis/.local/share/git/lsp-langserver" . "/projects/lsp-langserver")))
   (lsp-docker-init-clients
    :docker-image-id lsp-docker-image-name
    :docker-container-name lsp-docker-container-name
