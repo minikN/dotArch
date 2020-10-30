@@ -28,7 +28,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-monokai-spectrum)
+;(setq doom-theme 'doom-monokai-spectrum)
+;(setq doom-themes-treemacs-theme "doom-colors")
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -62,7 +63,9 @@
 (after! persp-mode
   (remove-hook 'persp-add-buffer-on-after-change-major-mode-filter-functions #'doom-unreal-buffer-p))
 
-;; Set theme colors for ENV
+;; Setup icons, theme and colors
+(load! "userconfig/icons")
+(load! "userconfig/theme")
 (load! "userconfig/theme-colors")
 
 ;; Linux specific config
@@ -84,6 +87,9 @@
 
 ;; Configure lsp and lsp-ui
 (load! "userconfig/lsp")
+
+;; Configure treemacs & lsp-treemacs
+(load! "userconfig/treemacs")
 
 ;; Flycheck
 (load! "userconfig/flycheck")

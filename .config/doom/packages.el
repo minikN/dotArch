@@ -53,6 +53,15 @@
 ;; Determine the enviroment we are running on.
 (load! "userconfig/env")
 
+;; Setup theme
+(package! emacs-doom-themes :recipe
+  (:host github
+   :repo "minikN/emacs-doom-themes"
+   :branch "monokai-pro-ristretto"
+   :files ("*.el" "themes/*.el")))
+(package! solaire-mode)
+
+;; Loading packages for linux only
 (if (equal ENV "linux")
     (progn (package! exwm)
            (package! bluetooth)
@@ -60,5 +69,7 @@
            (package! imgur
              :recipe (:host github :repo "minikN/imgur.el"))))
 
+;; load common packages
 (package! pinentry)
 (package! lsp-docker)
+(package! lsp-treemacs)
