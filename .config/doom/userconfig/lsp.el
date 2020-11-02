@@ -32,21 +32,38 @@
 ;;; Configure and initialize lsp-docker with the settings above.
 (use-package! lsp-docker
   :config
-  (setq lsp-docker-container-name "lsp-langserver"
-        lsp-docker-image-name lsp-docker-container-name
-        lsp-docker-path-mappings
-        '(("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
-          ("/home/demis/.local/share/git/laravel2" . "/projects/laravel2")
-          ("/home/demis/.local/share/git/lsp-langserver" . "/projects/lsp-langserver")))
-  (lsp-docker-init-clients
-   :docker-image-id lsp-docker-image-name
-   :docker-container-name lsp-docker-container-name
-   :client-packages '(lsp-bash lsp-dockerfile lsp-php)
-   :client-configs (list
-                    (list :server-id 'bash-ls :docker-server-id 'bashls-docker :server-command "bash-language-server start")
-                    (list :server-id 'iph :docker-server-id 'phpls-docker :server-command "intelephense --stdio")
-                    (list :server-id 'dockerfile-ls :docker-server-id 'dockerfilels-docker :server-command "docker-langserver --stdio"))
-   :path-mappings lsp-docker-path-mappings))
+
+  ;;;; sh, bash, zsh
+  (require 'lsp-bash nil t)
+  (lsp-docker-register-client :priority 10
+                              :server-id 'bash-ls
+                              :docker-server-id 'bashls-docker
+                              :docker-image-id "lsp-docker-shell"
+                              :docker-container-name "lsp-docker-shell"
+                              :server-command "bash-language-server start"
+                              :path-mappings '(("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")))
+
+
+  ;;;; php
+  (require 'lsp-php nil t)
+  (lsp-docker-register-client :priority 10
+                              :server-id 'iph
+                              :docker-server-id 'phpls-docker
+                              :docker-image-id "lsp-docker-php"
+                              :docker-container-name "lsp-docker-php"
+                              :server-command "intelephense --stdio"
+                              :path-mappings '(("/home/demis/.local/share/git/laravel" . "/projects/laravel")))
+
+
+  ;;;; dockerfile
+  (require 'lsp-dockerfile nil t)
+  (lsp-docker-register-client :priority 10
+                              :server-id 'dockerfile-ls
+                              :docker-server-id 'dockerfilels-docker
+                              :docker-image-id "lsp-docker-dockerfile"
+                              :docker-container-name "lsp-docker-dockerfile"
+                              :server-command "docker-langserver --stdio"
+                              :path-mappings '(("/home/demis/.local/share/git/lsp-main-dev" . "/projects/lsp-main-dev"))))
 
 ;; After lsp-docker, lets configure some new flycheck checkers and enable them.
 (after! lsp-docker
