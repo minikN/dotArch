@@ -71,36 +71,19 @@
 ;; Linux specific config
 (if (equal ENV "linux")
     (progn
-      ;; ;; Power management
       (load! "userconfig/acpi")
-
-      ;; ;; Load EXWM and related configs
       (load! "userconfig/exwm")
       (load! "userconfig/exwm-randr")
       (load! "userconfig/exwm-polybar")
-
-      ;; Let's take some screenshots
       (load! "userconfig/screenshot")))
 
-;; Configure windows
 (load! "userconfig/windows")
-
-;; Configure lsp and lsp-ui
+(load! "userconfig/projectile")
 (load! "userconfig/lsp")
-
-;; Configure treemacs & lsp-treemacs
 (load! "userconfig/treemacs")
-
-;; Flycheck
 (load! "userconfig/flycheck")
-
-;; IRC
 (load! "userconfig/irc")
-
-;; Setup Pinentry for GPG and SSH
 (load! "userconfig/pinentry")
-
-;; Setup org mode
 (load! "userconfig/org-mode")
 
 ;; ivy-posframe
