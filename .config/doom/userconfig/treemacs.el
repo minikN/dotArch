@@ -7,9 +7,7 @@
         treemacs-follow-after-init t
         treemacs-silent-filewatch t
         treemacs-silent-refresh t
-        treemacs-recenter-after-file-follow 'always
-        treemacs-file-name-transformer (lambda (it) (concat "" it))
-        treemacs-directory-name-transformer (lambda (it) (concat "" it))))
+        treemacs-recenter-after-file-follow 'always))
 
 ;; (after! lsp-treemacs
 ;;   (lsp-treemacs-sync-mode 1))
