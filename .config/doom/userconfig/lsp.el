@@ -33,13 +33,17 @@
 (use-package! lsp-docker
   :config
 
+  (setq lsp-docker-shell-container-name "lsp-docker-shell"
+        lsp-docker-php-container-name "lsp-docker-php"
+        lsp-docker-dockerfile-container-name "lsp-docker-dockerfile")
+
   ;;;; sh, bash, zsh
   (require 'lsp-bash nil t)
   (lsp-docker-register-client :priority 10
                               :server-id 'bash-ls
                               :docker-server-id 'bashls-docker
-                              :docker-image-id "lsp-docker-shell"
-                              :docker-container-name "lsp-docker-shell"
+                              :docker-image-id lsp-docker-shell-container-name
+                              :docker-container-name lsp-docker-shell-container-name
                               :server-command "bash-language-server start"
                               :path-mappings '(("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")))
 
@@ -49,8 +53,8 @@
   (lsp-docker-register-client :priority 10
                               :server-id 'iph
                               :docker-server-id 'phpls-docker
-                              :docker-image-id "lsp-docker-php"
-                              :docker-container-name "lsp-docker-php"
+                              :docker-image-id lsp-docker-php-container-name
+                              :docker-container-name lsp-docker-php-container-name
                               :server-command "intelephense --stdio"
                               :path-mappings '(("/home/demis/.local/share/git/laravel" . "/projects/laravel")))
 
@@ -60,8 +64,8 @@
   (lsp-docker-register-client :priority 10
                               :server-id 'dockerfile-ls
                               :docker-server-id 'dockerfilels-docker
-                              :docker-image-id "lsp-docker-dockerfile"
-                              :docker-container-name "lsp-docker-dockerfile"
+                              :docker-image-id lsp-docker-dockerfile-container-name
+                              :docker-container-name lsp-docker-dockerfile-container-name
                               :server-command "docker-langserver --stdio"
                               :path-mappings '(("/home/demis/.local/share/git/lsp-main-dev" . "/projects/lsp-main-dev"))))
 

@@ -4,7 +4,7 @@
 (flycheck-define-checker sh-shellcheck-docker
   "Use shellcheck inside a docker container"
   :command ("docker" "exec" "-i"
-            (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+            (eval (concat lsp-docker-shell-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
             "shellcheck"
             "--format" "checkstyle"
             "--shell" (eval (symbol-name sh-shell))
@@ -36,7 +36,7 @@
 (flycheck-define-checker sh-zsh-docker
   "sh-zsh with docker support."
   :command ("docker" "exec" "-i"
-            (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+            (eval (concat lsp-docker-shell-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
             "zshwrapper" (eval (db/get-docker-path lsp-docker-path-mappings (projectile-project-root)))
             (eval (buffer-file-name)))
   :error-patterns
