@@ -2,13 +2,22 @@
 
 ;; Generic settings
 (after! lsp-mode
-  (setq lsp-auto-guess-root nil))
+  (setq lsp-auto-guess-root nil
+        lsp-file-watch-threshold 10000))
 
 (after! lsp-ui
   (setq lsp-ui-peek-list-width 100
         lsp-ui-peek-fontify 'always
-        lsp-ui-imenu-enable t
-        imenu-auto-rescan t))
+        lsp-ui-doc-position 'top
+        lsp-ui-doc-alignment 'window
+        lsp-ui-doc-max-height 30
+        lsp-ui-doc-max-width 90
+        lsp-ui-doc-border "white"
+        lsp-ui-imenu-enable nil))
+
+;; Key bindings
+(map! :leader
+      :desc "Show documentation" "c K" 'lsp-ui-doc-show)
 
 ;; Docker
 (defun db/get-docker-path (path-mappings project-root)
