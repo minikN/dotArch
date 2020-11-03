@@ -12,7 +12,6 @@
 
 ;; lsp-treemacs
 (with-eval-after-load 'lsp-treemacs
-  (lsp-treemacs-sync-mode 1)
   (setq lsp-treemacs-symbols-position-params
         `((side . right)
           (slot . 1)

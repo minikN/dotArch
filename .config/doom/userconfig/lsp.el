@@ -72,4 +72,5 @@
 ;; After lsp-docker, lets configure some new flycheck checkers and enable them.
 (after! lsp-docker
   ;;; sh-mode (sh, bash, zsh)
-  (load! "checkers/sh"))
+  (load! "checkers/sh")
+  (load! "checkers/dockerfile"))
