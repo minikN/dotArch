@@ -57,7 +57,6 @@
 (package! emacs-doom-themes :recipe
   (:host github
    :repo "minikN/emacs-doom-themes"
-   :branch "monokai-pro-ristretto"
    :files ("*.el" "themes/*.el")))
 (package! solaire-mode)
 
