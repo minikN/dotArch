@@ -85,6 +85,7 @@
 (load! "userconfig/irc")
 (load! "userconfig/pinentry")
 (load! "userconfig/org-mode")
+(load! "userconfig/magit")
 
 ;; ivy-posframe
 ;(load! "userconfig/ivy-posframe")
