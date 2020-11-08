@@ -22,8 +22,8 @@ fi
 
 # Setup correct gnupg permissions
 chown -R $(whoami) $GITDIR/dotArch/.local/share/gnupg
-find $GITDIR/dotArch/.local/share/gnupg -type f exec chmod 600 {} \;
-find $GITDIR/dotArch/.local/share/gnupg -type d exec chmod 700 {} \;
+find $GITDIR/dotArch/.local/share/gnupg -type f -exec chmod 600 {} \;
+find $GITDIR/dotArch/.local/share/gnupg -type d -exec chmod 700 {} \;
 
 # Colors
 autoload -U colors && colors
