@@ -41,7 +41,7 @@
        ;;neotree               ; a project drawer, like NERDTree for vim
        ophints                 ; highlight the region an operation acts on
        (popup +defaults)       ; tame sudden yet inevitable temporary windows
-       ;;pretty-code           ; replace bits of code with pretty symbols
+       pretty-code           ; replace bits of code with pretty symbols
        ;;tabs                  ; an tab bar for Emacs
        (treemacs                ; a project drawer, like neotree but cooler
         :tools magit
@@ -179,7 +179,7 @@
         :completion company)   ; the tubes
 
        :email
-       ;;(mu4e +gmail)
+       mu4e
        ;;notmuch
        ;;(wanderlust +gmail)
 

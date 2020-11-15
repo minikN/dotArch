@@ -72,3 +72,4 @@
 (package! pinentry)
 (package! lsp-docker)
 (package! lsp-treemacs)
+(package! dmenu)

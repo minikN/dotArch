@@ -9,7 +9,7 @@
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Demis Balbach"
-      user-mail-address "demisbalbach@googlemail.com")
+      user-mail-address "db@minikn.xyz")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -22,7 +22,8 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (if (equal ENV "linux")
-    (setq doom-font (font-spec :family "Cozette" :size 12))
+    ;(setq doom-font (font-spec :family "Cozette" :size 12))
+    (setq doom-font (font-spec :family "Cascadia Code" :size 16))
   (setq doom-font (font-spec :family "Cascadia Mono" :size 14)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
@@ -85,6 +86,8 @@
 (load! "userconfig/irc")
 (load! "userconfig/pinentry")
 (load! "userconfig/org-mode")
-
+(load! "userconfig/mail")
+(load! "userconfig/shell")
+(load! "userconfig/browser")
 ;; ivy-posframe
 ;(load! "userconfig/ivy-posframe")
