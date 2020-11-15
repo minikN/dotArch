@@ -89,5 +89,6 @@
 (load! "userconfig/mail")
 (load! "userconfig/shell")
 (load! "userconfig/browser")
+(load! "userconfig/magit")
 ;; ivy-posframe
 ;(load! "userconfig/ivy-posframe")
