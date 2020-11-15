@@ -23,7 +23,7 @@
 ;; font string. You generally only need these two:
 (if (equal ENV "linux")
     ;(setq doom-font (font-spec :family "Cozette" :size 12))
-    (setq doom-font (font-spec :family "Cascadia Code" :size 16))
+    (setq doom-font (font-spec :family "Cozette" :size 16))
   (setq doom-font (font-spec :family "Cascadia Mono" :size 14)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
