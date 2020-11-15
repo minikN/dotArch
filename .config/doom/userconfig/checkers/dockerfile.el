@@ -4,7 +4,7 @@
   "A Dockerfile syntax checker using the hadolint.
 See URL `http://github.com/hadolint/hadolint/'."
   :command ("docker" "exec" "-i"
-            (eval (concat lsp-docker-dockerfile-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+            (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
             "hadolint" "-")
   :standard-input t
   :error-patterns
