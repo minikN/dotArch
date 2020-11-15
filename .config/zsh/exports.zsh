@@ -16,6 +16,9 @@ if test -z "${XDG_RUNTIME_DIR}"; then
 	fi
  fi
 
+# SHELL
+export SHELL="/bin/zsh"
+
 # Emacs
 export EMACS_USER_DIRECTORY="$XDG_CONFIG_HOME/emacs"
 
