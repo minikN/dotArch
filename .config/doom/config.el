@@ -90,5 +90,6 @@
 (load! "userconfig/shell")
 (load! "userconfig/browser")
 (load! "userconfig/magit")
+(load! "userconfig/dmenu")
 ;; ivy-posframe
 ;(load! "userconfig/ivy-posframe")
