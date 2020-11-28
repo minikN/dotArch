@@ -1,13 +1,15 @@
 ;;; ../../.local/share/git/dotArch/.config/doom/userconfig/mail.el -*- lexical-binding: t; -*-
 
-(set-email-account! "minikn.xyz"
-  '((mu4e-sent-folder       . "/Sent Mail")
-    (mu4e-drafts-folder     . "/Drafts")
-    (mu4e-trash-folder      . "/Trash")
-    (mu4e-refile-folder     . "/All Mail")
-    (smtpmail-smtp-user     . "db")
+(set-email-account! "db@minikn.xyz"
+  '((mu4e-sent-folder       . "/db@minikn.xyz/Sent")
+    (mu4e-drafts-folder     . "/db@minikn.xyz/Drafts")
+    (mu4e-trash-folder      . "/db@minikn.xyz/Trash")
+    (smtpmail-smtp-user     . "db@minikn.xyz")
+    (smtpmail-smtp-server   . "smtp.mailbox.org")
+    (smtpmail-smtp-service  . 587)
     (mu4e-compose-signature . "Mit freundlichen Grüßen / Best regards\nDemis Balbach"))
   t)
+
 (after! mu4e
   (setq mu4e-get-mail-command (concat "mbsync -a -c " (getenv "XDG_CONFIG_HOME") "/isync/mbsyncrc")))
 
