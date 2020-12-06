@@ -16,6 +16,11 @@ if test -z "${XDG_RUNTIME_DIR}"; then
 	fi
  fi
 
+# Defaults
+export VISUAL=emacsclient
+export EDITOR="$VISUAL"
+export BROWSER="qutebrowser"
+
 # SHELL
 export SHELL="/bin/zsh"
 

@@ -7,10 +7,8 @@ xsetroot -cursor_name left_ptr
 # set keyboard repeat rate
 xset r rate 200 60
 
-export VISUAL=emacsclient
-export EDITOR="$VISUAL"
-
 # load resources
 xrdb -load "$XDG_CONFIG_HOME"/X11/Xresources &
 
-exec dbus-run-session emacs
+# Launch emacs
+exec dbus-launch --exit-with-session emacs -mm
