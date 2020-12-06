@@ -74,11 +74,11 @@
     (progn
       (load! "userconfig/acpi")
       (load! "userconfig/exwm")
+      (load! "userconfig/edwina")
       (load! "userconfig/exwm-randr")
       (load! "userconfig/exwm-polybar")
       (load! "userconfig/screenshot")))
 
-(load! "userconfig/windows")
 (load! "userconfig/projectile")
 (load! "userconfig/lsp")
 (load! "userconfig/treemacs")
@@ -90,6 +90,6 @@
 (load! "userconfig/shell")
 (load! "userconfig/browser")
 (load! "userconfig/magit")
-(load! "userconfig/dmenu")
+(load! "userconfig/pass")
 ;; ivy-posframe
 ;(load! "userconfig/ivy-posframe")

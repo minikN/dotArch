@@ -63,6 +63,7 @@
 ;; Loading packages for linux only
 (if (equal ENV "linux")
     (progn (package! exwm)
+           (package! edwina)
            (package! bluetooth)
            (package! pulseaudio-control)
            (package! imgur
