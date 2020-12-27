@@ -41,11 +41,22 @@
           ([?\s-9] . (lambda () (interactive) (exwm-workspace-switch 8)))
           ([?\s-0] . (lambda () (interactive) (exwm-workspace-switch 9)))
 
-          ;; Move between windows
-          ([s-left] . windmove-left)
-          ([s-right] . windmove-right)
-          ([s-up] . windmove-up)
-          ([s-down] . windmove-down)
+          ;; NOT NEEDED IN MASTER/STACK LAYOUT
+          ;; Move focus between windows (vim and arrow keys)
+          ;; ([s-left] . windmove-left)
+          ;; ([?\s-h]  . windmove-left)
+          ;; ([s-right] . windmove-right)
+          ;; ([?\s-l]   . windmove-right)
+          ;; ([s-up] . windmove-up)
+          ;; ([?\s-k] . windmove-up)
+          ;; ([s-down] . windmove-down)
+          ;; ([?\s-j] . windmove-down)
+
+          ;; ;; Move windows
+          ;; ([M-s-left] . windmove-swap-states-left)
+          ;; ([M-s-right] . windmove-swap-states-right)
+          ;; ([M-s-up] . windmove-swap-states-up)
+          ;; ([M-s-down] . windmove-swap-states-down)
 
           ;; Master/Stack layout
           ;;; Arrange the windows if needed
@@ -60,7 +71,6 @@
           ;;; Move down the hierarchy
           ([?\s-e] . edwina-select-next-window) ;; move focus
           ([?\s-E] . edwina-swap-next-window) ;; move window
-
 
           ;;; Move down the hierarchy
           ([?\s-q] . edwina-select-previous-window) ;; move focus
