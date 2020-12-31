@@ -1,14 +1,23 @@
 ;;; ~/.doom.d/userconfig/exwm-polybar.el -*- lexical-binding: t; -*-
 
-;; Start polybar
-(defun db/start-polybar (&optional theme)
-  "Start polybar."
-  (start-process-shell-command "polybar-msg" nil "polybar-msg cmd quit")
-  (interactive)
-  (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-single.ini single"))
+(defvar db/polybar-process nil
+  "Holds the process of the running Polybar instance, if any")
 
-;;(db/start-polybar)
-(advice-add 'enable-theme :after #'db/start-polybar)
+(defun db/kill-panel ()
+  "Kill the polybar panel"
+  (interactive)
+  (when db/polybar-process
+    (ignore-errors
+      (kill-process db/polybar-process)))
+  (setq db/polybar-process nil))
+
+(defun db/start-panel ()
+  "Start the polybar panel"
+  (interactive)
+  (db/kill-panel)
+  (setq db/polybar-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-single.ini single")))
+
+;(advice-add 'enable-theme :after #'db/start-panel)
 
 (setq WORKSPACE_1 ""
       WORKSPACE_2 ""
