@@ -64,8 +64,8 @@
 (if (equal ENV "linux")
     (progn (package! exwm)
            (package! edwina)
-           (package! bluetooth)
-           (package! pulseaudio-control)
+           ;(package! bluetooth)
+           ;(package! pulseaudio-control)
            (package! imgur
              :recipe (:host github :repo "minikN/imgur.el"))))
 
@@ -73,4 +73,3 @@
 (package! pinentry)
 (package! lsp-docker)
 (package! lsp-treemacs)
-(package! dmenu)
