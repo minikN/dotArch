@@ -38,9 +38,9 @@ Setting the font globally.
 Doom exposes five (optional) variables for controlling fonts in Doom. Here
 are the three important ones:
 
- - ==doom-font==
-- ==doom-variable-pitch-font==
-- ==doom-big-font== -- used for ==doom-big-font-mode==; use this for presentations or streaming.
+ - `doom-font`
+- `doom-variable-pitch-font`
+- `doom-big-font` -- used for `doom-big-font-mode`; use this for presentations or streaming.
 
 They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 font string.
@@ -60,7 +60,7 @@ This specifies global line spacing. 0 refers to no line spacing.
 (setq line-spacing 0.2)
 #+end_src
 
-The ==all-the-icons== package is included in DOOM.
+The `all-the-icons` package is included in DOOM.
 However, it's missing some important (for me, at least) icons.
 Let's set them up manually. This is list is prone to changes.
 #+begin_src emacs-lisp
@@ -166,7 +166,7 @@ So lets extract them into environment variables.
 #+end_src
 
 * System
-This configuration is platform-specific. Mind the ==:tangle== condition in each code block.
+This configuration is platform-specific. Mind the `:tangle` condition in each code block.
 
 This is an interactive function for shutdown, reboot and sleep. It will get bound to
 the power button later.
@@ -187,7 +187,7 @@ the power button later.
                    (shell-command "zzz"))))))))
 #+end_src
 
-Setting up ==exwm== as a window manager.
+Setting up `exwm` as a window manager.
 #+begin_src emacs-lisp
 (unless (string-match "-[Mm]icrosoft" operating-system-release)
   (server-start)
@@ -354,7 +354,7 @@ Setting up ==exwm== as a window manager.
     (exwm-enable)))
 #+end_src
 
-We need to configure ==randr== for multiple monitor support.
+We need to configure `randr` for multiple monitor support.
 #+begin_src emacs-lisp
 (unless (string-match "-[Mm]icrosoft" operating-system-release)
   (require 'exwm-randr)
@@ -377,7 +377,7 @@ We need to configure ==randr== for multiple monitor support.
   (exwm-randr-enable))
 #+end_src
 
-==polybar== needs some configuration to show the current exwm workspace correctly.
+`polybar` needs some configuration to show the current exwm workspace correctly.
 #+begin_src emacs-lisp
 (unless (string-match "-[Mm]icrosoft" operating-system-release)
   (defvar db/polybar-process nil
@@ -429,13 +429,13 @@ We need to configure ==randr== for multiple monitor support.
   (add-hook 'exwm-workspace-switch-hook #'dw/update-polybar-exwm))
 #+end_src
 
-Reload ==polybar== if the theme changes.
+Reload `polybar` if the theme changes.
 #+begin_src emacs-lisp
 (unless (string-match "-[Mm]icrosoft" operating-system-release)
   (advice-add 'enable-theme :after #'db/start-panel))
 #+end_src
 
-Set up window manager with ==edwina== for a master/stack layout.
+Set up window manager with `edwina` for a master/stack layout.
 #+begin_src emacs-lisp
 (use-package! edwina
   :config
@@ -443,20 +443,20 @@ Set up window manager with ==edwina== for a master/stack layout.
   (edwina-mode 1))
 #+end_src
 
-Binding ==PRINT_SCREEN== to execute ==imgur.el==.
+Binding `PRINT_SCREEN` to execute `imgur.el`.
 #+begin_src emacs-lisp
 (unless (string-match "-[Mm]icrosoft" operating-system-release)
   (global-set-key [print] (lambda () (interactive) (imgur-init-screenshot))))
 #+end_src
 * IDE
-General settings for ==lsp-mode==
+General settings for `lsp-mode`
 #+begin_src emacs-lisp
 (after! lsp-mode
   (setq lsp-auto-guess-root nil
         lsp-file-watch-threshold 10000))
 #+end_src
 
-** ==lsp-ui==
+** `lsp-ui`
 #+begin_src emacs-lisp
 (after! lsp-ui
   (setq lsp-ui-peek-list-width 100
@@ -473,7 +473,7 @@ General settings for ==lsp-mode==
       :desc "Show documentation" "c K" 'lsp-ui-doc-show)
 #+end_src
 
-** ==lsp-docker==
+** `lsp-docker`
 Get the docker path for a given real path (currently not needed)
 #+begin_src emacs-lisp
 ;; (defun db/get-docker-path (path-mappings project-root)
@@ -486,7 +486,7 @@ Get the docker path for a given real path (currently not needed)
 ;;     (concat (car (car current-project)) "/" (file-relative-name buffer-file-name project-root))))
 #+end_src
 
-Initialize ==lsp-docker==
+Initialize `lsp-docker`
 #+begin_src emacs-lisp
 (use-package! lsp-docker
   :config
@@ -509,7 +509,7 @@ Initialize ==lsp-docker==
    :path-mappings lsp-docker-path-mappings))
 #+end_src
 
-After ==lsp-docker==, lets configure some new flycheck checkers and enable them.
+After `lsp-docker`, lets configure some new flycheck checkers and enable them.
 #+begin_src emacs-lisp
 (after! lsp-docker
   ;;; bash, sh
@@ -591,8 +591,8 @@ See URL `http://github.com/hadolint/hadolint/'."
     (setq flycheck-checker 'sh-hadolint-docker)))
 #+end_src
 
-** ==lsp-treemacs==
-Initial configuration for ==treemacs==
+** `lsp-treemacs`
+Initial configuration for `treemacs`
 #+begin_src emacs-lisp
 (after! treemacs
   (treemacs-follow-mode t)
@@ -604,7 +604,7 @@ Initial configuration for ==treemacs==
         treemacs-recenter-after-file-follow 'always))
 #+end_src
 
-Configuration for ==lsp-treemacs==
+Configuration for `lsp-treemacs`
 #+begin_src emacs-lisp
 (with-eval-after-load 'lsp-treemacs
   (setq lsp-treemacs-symbols-position-params
@@ -627,8 +627,8 @@ Let's toggle the symbols sidebar with a function
 (map! :leader
       :desc "Toggle Symbols" "c S" #'db/lsp-treemacs-symbols-toggle)
 #+end_src
-** ==flycheck==
-Configure the styling for on the fly error reporting with ==flycheck==
+** `flycheck`
+Configure the styling for on the fly error reporting with `flycheck`
 #+begin_src emacs-lisp
 (after! flycheck
   (custom-set-faces!
@@ -638,28 +638,28 @@ Configure the styling for on the fly error reporting with ==flycheck==
 #+end_src
 
 * DOOM
-When using ==SPC-b-B==, I want to see all buffers, not only workspace buffers.
+When using `SPC-b-B`, I want to see all buffers, not only workspace buffers.
 #+begin_src emacs-lisp
 (after! persp-mode
   (remove-hook 'persp-add-buffer-on-after-change-major-mode-filter-functions #'doom-unreal-buffer-p))
 #+end_src
 
 * Application specific configuration
-** ==counsel==
-When using ==counsel-linux-app== as an app launcher, we only want to see the name and the comment for each application, not its full path.
+** `counsel`
+When using `counsel-linux-app` as an app launcher, we only want to see the name and the comment for each application, not its full path.
 #+begin_src emacs-lisp
 (use-package! counsel
   :config
   (setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-only))
 #+end_src
-** ==dired==
-Lets customize the output of ==ls==
+** `dired`
+Lets customize the output of `ls`
 #+begin_src emacs-lisp
 (use-package! dired
   :custom ((dired-listing-switches "-aAh --group-directories-first")))
 #+end_src
 
-Use ==dired-single== to only use one buffer for each dired process.
+Use `dired-single` to only use one buffer for each dired process.
 #+begin_src emacs-lisp
 (use-package! dired-single)
 #+end_src
@@ -669,12 +669,12 @@ We want icons next to folders and files in dired
 (use-package! all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
-** ==magit==
+** `magit`
 Set the default clone directory for magit
 #+begin_src emacs-lisp
 (setq magit-clone-default-directory (concat (getenv "GITDIR") "/"))
 #+end_src
-** ==mu4e==
+** `mu4e`
 Let's set up the main mail account.
 #+begin_src emacs-lisp
 (set-email-account! "db@minikn.xyz"
@@ -688,17 +688,17 @@ Let's set up the main mail account.
   t)
 #+end_src
 
-We need to specify the command for ==mu4e== to sync our mail.
+We need to specify the command for `mu4e` to sync our mail.
 #+begin_src emacs-lisp
 (after! mu4e
   (setq mu4e-get-mail-command (concat "mbsync -a -c " (getenv "XDG_CONFIG_HOME") "/isync/mbsyncrc")))
 #+end_src
 
-Finally, we need to specify the ==load-path== so emacs finds the executable.
+Finally, we need to specify the `load-path` so emacs finds the executable.
 #+begin_src emacs-lisp
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 #+end_src
-** ==org-mode==
+** `org-mode`
 #+begin_src emacs-lisp
 (setq org-directory "~/org/"
       org-todo-keywords '((type "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
@@ -709,7 +709,7 @@ Finally, we need to specify the ==load-path== so emacs finds the executable.
       ;; Set files to scan for todos
       org-agenda-files (ignore-errors (directory-files +org-dir t "\\.org$" t)))
 #+end_src
-** TODO ==pass==
+** TODO `pass`
 Write functions
 #+begin_src emacs-lisp
 (defun db/pass-push ()
@@ -727,7 +727,7 @@ Write functions
     "p" #'db/pass-push
     "P" #'db/pass-pull))
 #+end_src
-** ==pinentry==
+** `pinentry`
 #+begin_src emacs-lisp
 ;; Enable loopback so that pinentry will pop up in emacs
 (pinentry-start)
@@ -747,7 +747,7 @@ Write functions
       :desc "Reload GPG agent" "g a" #'db/reload-gpg-agent)
 #+end_src
 
-** ==projectile==
+** `projectile`
 #+begin_src emacs-lisp
 (after! projectile
   (setq projectile-track-known-projects-automatically nil))
