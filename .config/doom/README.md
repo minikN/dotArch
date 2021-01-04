@@ -1,781 +1,887 @@
-    ;; -*- lexical-binding: t -*-
+---
+author: Demis Balbach
+email: 'db\@minikn.xyz'
+title: Config
+---
+
+```{=org}
+#+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes :results silent :padline no
+```
+```{=org}
+#+EXPORT_FILE_NAME: README.md
+```
+``` {.commonlisp org-language="emacs-lisp"}
+;; -*- lexical-binding: t -*-
+```
 
 This is the main user configuration for my DOOM Emacs setup.
 
-[[_TOC_]]
+```{=org}
+#+MARKDOWN: [[_TOC_]]
+```
+General
+=======
 
+Place your private configuration here! Remember, you do not need to run
+\'doom sync\' after modifying this file!
 
-# General
+Here are some additional functions/macros that could help you configure
+Doom:
 
-Place your private configuration here! Remember, you do not need to run &rsquo;doom
-sync&rsquo; after modifying this file!
+``` {.commonlisp org-language="emacs-lisp"}
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
+;; - `map!' for binding new keys
+```
 
-Here are some additional functions/macros that could help you configure Doom:
+To get information about any of these functions/macros, move the cursor
+over the highlighted symbol at press \'K\' (non-evil users must press
+\'C-c g k\') This will open documentation for it, including demos of how
+they are used. You can also try \'gd\' (or \'C-c g d\') to jump to their
+definition and see how they are implemented.
 
-    ;; - `load!' for loading external *.el files relative to this one
-    ;; - `use-package' for configuring packages
-    ;; - `after!' for running code after a package has loaded
-    ;; - `add-load-path!' for adding directories to the `load-path', relative to
-    ;;   this file. Emacs searches the `load-path' when you load packages with
-    ;;   `require' or `use-package'.
-    ;; - `map!' for binding new keys
+Let\'s set the default browser when clicking on links.
 
-To get information about any of these functions/macros, move the cursor over
-the highlighted symbol at press &rsquo;K&rsquo; (non-evil users must press &rsquo;C-c g k&rsquo;)
-This will open documentation for it, including demos of how they are used.
-You can also try &rsquo;gd&rsquo; (or &rsquo;C-c g d&rsquo;) to jump to their definition and see how
-they are implemented.
+``` {.commonlisp org-language="emacs-lisp"}
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "qutebrowser")
+```
 
-Let&rsquo;s set the default browser when clicking on links.
+User Interface
+==============
 
-    (setq browse-url-browser-function 'browse-url-generic
-          browse-url-generic-program "qutebrowser")
-
-
-# User Interface
-
-Setting the font globally.
-Doom exposes five (optional) variables for controlling fonts in Doom. Here
-are the three important ones:
+Setting the font globally. Doom exposes five (optional) variables for
+controlling fonts in Doom. Here are the three important ones:
 
 -   `doom-font`
 
+```{=html}
+<!-- -->
+```
 -   `doom-variable-pitch-font`
--   `doom-big-font` &#x2013; used for `doom-big-font-mode`; use this for presentations or streaming.
+-   `doom-big-font` -- used for `doom-big-font-mode`; use this for
+    presentations or streaming.
 
-They all accept either a font-spec, font string (&ldquo;Input Mono-12&rdquo;), or xlfd
-font string.
+They all accept either a font-spec, font string (\"Input Mono-12\"), or
+xlfd font string.
 
-    (setq doom-font (font-spec :family "Cascadia Mono" :size 14))
+``` {.commonlisp org-language="emacs-lisp"}
+(setq doom-font (font-spec :family "Cascadia Mono" :size 14))
+```
 
-This determines the style of line numbers in effect. If set to \`nil\`, line
-numbers are disabled. For relative line numbers, set this to \`relative\`.
+This determines the style of line numbers in effect. If set to \`nil\`,
+line numbers are disabled. For relative line numbers, set this to
+\`relative\`.
 
-    (setq display-line-numbers-type t)
+``` {.commonlisp org-language="emacs-lisp"}
+(setq display-line-numbers-type t)
+```
 
-This specifies global line spacing. 0 refers to no line spacing.
-0.1 refers to 10% line spacing.
+This specifies global line spacing. 0 refers to no line spacing. 0.1
+refers to 10% line spacing.
 
-    (setq line-spacing 0.2)
+``` {.commonlisp org-language="emacs-lisp"}
+(setq line-spacing 0.2)
+```
 
-The `all-the-icons` package is included in DOOM.
-However, it&rsquo;s missing some important (for me, at least) icons.
-Let&rsquo;s set them up manually. This is list is prone to changes.
+The `all-the-icons` package is included in DOOM. However, it\'s missing
+some important (for me, at least) icons. Let\'s set them up manually.
+This is list is prone to changes.
 
-    (after! all-the-icons
-      (add-to-list 'all-the-icons-icon-alist '("^*.conf$" all-the-icons-fileicon "config" :face all-the-icons-yellow))
-      (add-to-list 'all-the-icons-icon-alist '("^web.config$" all-the-icons-fileicon "config" :face all-the-icons-green))
-      (add-to-list 'all-the-icons-icon-alist '("^phpunit.xml$" all-the-icons-fileicon "phpunit" :face all-the-icons-blue))
-      (add-to-list 'all-the-icons-icon-alist '("^composer.lock$" all-the-icons-fileicon "composer" :face all-the-icons-yellow))
-      (add-to-list 'all-the-icons-icon-alist '("^composer.json$" all-the-icons-fileicon "composer" :face all-the-icons-yellow)))
+``` {.commonlisp org-language="emacs-lisp"}
+(after! all-the-icons
+  (add-to-list 'all-the-icons-icon-alist '("^*.conf$" all-the-icons-fileicon "config" :face all-the-icons-yellow))
+  (add-to-list 'all-the-icons-icon-alist '("^web.config$" all-the-icons-fileicon "config" :face all-the-icons-green))
+  (add-to-list 'all-the-icons-icon-alist '("^phpunit.xml$" all-the-icons-fileicon "phpunit" :face all-the-icons-blue))
+  (add-to-list 'all-the-icons-icon-alist '("^composer.lock$" all-the-icons-fileicon "composer" :face all-the-icons-yellow))
+  (add-to-list 'all-the-icons-icon-alist '("^composer.json$" all-the-icons-fileicon "composer" :face all-the-icons-yellow)))
+```
 
-Let&rsquo;s give tooltips a border.
+Let\'s give tooltips a border.
 
-    ;;;###package pos-tip
-    (setq pos-tip-internal-border-width 6
-          pos-tip-border-width 1)
+``` {.commonlisp org-language="emacs-lisp"}
+;;;###package pos-tip
+(setq pos-tip-internal-border-width 6
+      pos-tip-border-width 1)
+```
 
-Because I&rsquo;m using my own fork of doom-themes (look in packages.el) we can&rsquo;t use the build in doom module.
-We need to configure it and solaire-mode manually.
+Because I\'m using my own fork of doom-themes (look in packages.el) we
+can\'t use the build in doom module. We need to configure it and
+solaire-mode manually.
 
-    (use-package! doom-themes
-      :defer t
-      :init
-      (setq doom-theme 'doom-monokai-spectrum
-            doom-themes-treemacs-enable-variable-pitch nil
-            doom-themes-treemacs-theme "doom-colors-extended"
-            lsp-treemacs-theme "doom-colors-extended")
-    
-      ;; improve integration w/ org-mode
-      (add-hook 'doom-load-theme-hook #'doom-themes-org-config)
-    
-      ;; more Atom-esque file icons for neotree/treemacs
-      (when (featurep! :ui neotree)
-        (add-hook 'doom-load-theme-hook #'doom-themes-neotree-config)
-        (setq doom-themes-neotree-enable-variable-pitch t
-              doom-themes-neotree-file-icons 'simple
-              doom-themes-neotree-line-spacing 2))
-      (when (featurep! :ui treemacs)
-        (add-hook 'doom-load-theme-hook #'doom-themes-treemacs-config)))
-    
-    (use-package! solaire-mode
-      :when (or (daemonp) (display-graphic-p))
-      :hook (doom-load-theme . solaire-global-mode)
-      :config
-      (when (daemonp)
-        (add-hook! '(doom-switch-frame-hook after-make-frame-functions)
-          (defun +doom-disable-solaire-mode-maybe-h (&optional frame)
-            (if (display-graphic-p frame)
-                (unless solaire-global-mode
-                  (solaire-global-mode +1))
-              (when solaire-global-mode
-                (solaire-global-mode -1)))))))
+``` {.commonlisp org-language="emacs-lisp"}
+(use-package! doom-themes
+  :defer t
+  :init
+  (setq doom-theme 'doom-monokai-spectrum
+        doom-themes-treemacs-enable-variable-pitch nil
+        doom-themes-treemacs-theme "doom-colors-extended"
+        lsp-treemacs-theme "doom-colors-extended")
 
-We need the current theme colors&rsquo; outside of emacs (e.g. for polybar)
+  ;; improve integration w/ org-mode
+  (add-hook 'doom-load-theme-hook #'doom-themes-org-config)
+
+  ;; more Atom-esque file icons for neotree/treemacs
+  (when (featurep! :ui neotree)
+    (add-hook 'doom-load-theme-hook #'doom-themes-neotree-config)
+    (setq doom-themes-neotree-enable-variable-pitch t
+          doom-themes-neotree-file-icons 'simple
+          doom-themes-neotree-line-spacing 2))
+  (when (featurep! :ui treemacs)
+    (add-hook 'doom-load-theme-hook #'doom-themes-treemacs-config)))
+
+(use-package! solaire-mode
+  :when (or (daemonp) (display-graphic-p))
+  :hook (doom-load-theme . solaire-global-mode)
+  :config
+  (when (daemonp)
+    (add-hook! '(doom-switch-frame-hook after-make-frame-functions)
+      (defun +doom-disable-solaire-mode-maybe-h (&optional frame)
+        (if (display-graphic-p frame)
+            (unless solaire-global-mode
+              (solaire-global-mode +1))
+          (when solaire-global-mode
+            (solaire-global-mode -1)))))))
+```
+
+We need the current theme colors\' outside of emacs (e.g. for polybar)
 So lets extract them into environment variables.
 
-    (defun db/extract-theme-colors (&optional theme)
-      "Extract colors from the current theme."
-      (interactive)
-      (setq THEME_BG (face-background 'default))
-      (setq THEME_FG (face-foreground 'default))
-      (setq THEME_B0 (face-foreground 'highlight))
-     ; (setq THEME_B1 (face-background 'highlight-indentation-current-column-face))
-      (setq THEME_B2 (face-background 'region))
-      (setq THEME_B3 (face-background 'tooltip))
-      (setq THEME_B4 (face-foreground 'fringe))
-      (setq THEME_B5 (face-background 'shadow))
-      (setq THEME_B6 (face-foreground 'font-lock-comment-face))
-      (setq THEME_B7 (face-foreground 'line-number-current-line))
-      (setq THEME_B8 (face-foreground 'lazy-highlight))
-    
-      (setq THEME_RED (face-foreground 'font-lock-preprocessor-face))
-      (setq THEME_ORANGE (face-foreground 'font-lock-warning-face))
-      (setq THEME_GREEN (face-foreground 'font-lock-function-name-face))
-      (setq THEME_YELLOW (face-foreground 'font-lock-string-face))
-      (setq THEME_VIOLET (face-foreground 'font-lock-constant-face))
-      (setq THEME_CYAN (face-foreground 'font-lock-type-face))
-    
-      (setenv "EMACS_THEME_BG" THEME_BG)
-      (setenv "EMACS_THEME_FG" THEME_FG)
-      (setenv "EMACS_THEME_B0" THEME_B0)
-     ; (setenv "EMACS_THEME_B1" THEME_B1)
-      (setenv "EMACS_THEME_B2" THEME_B2)
-      (setenv "EMACS_THEME_B3" THEME_B3)
-      (setenv "EMACS_THEME_B4" THEME_B4)
-      (setenv "EMACS_THEME_B5" THEME_B5)
-      (setenv "EMACS_THEME_B6" THEME_B6)
-      (setenv "EMACS_THEME_B7" THEME_B7)
-      (setenv "EMACS_THEME_B8" THEME_B8)
-    
-      (setenv "EMACS_THEME_RED" THEME_RED)
-      (setenv "EMACS_THEME_ORANGE" THEME_ORANGE)
-      (setenv "EMACS_THEME_GREEN" THEME_GREEN)
-      (setenv "EMACS_THEME_YELLOW" THEME_YELLOW)
-      (setenv "EMACS_THEME_VIOLDET" THEME_VIOLET)
-      (setenv "EMACS_THEME_CYAN" THEME_CYAN))
-    
-    ;; Every time we change a theme we need to call the function above.
-    (advice-add 'enable-theme :after #'db/extract-theme-colors)
+``` {.commonlisp org-language="emacs-lisp"}
+(defun db/extract-theme-colors (&optional theme)
+  "Extract colors from the current theme."
+  (interactive)
+  (setq THEME_BG (face-background 'default))
+  (setq THEME_FG (face-foreground 'default))
+  (setq THEME_B0 (face-foreground 'highlight))
+ ; (setq THEME_B1 (face-background 'highlight-indentation-current-column-face))
+  (setq THEME_B2 (face-background 'region))
+  (setq THEME_B3 (face-background 'tooltip))
+  (setq THEME_B4 (face-foreground 'fringe))
+  (setq THEME_B5 (face-background 'shadow))
+  (setq THEME_B6 (face-foreground 'font-lock-comment-face))
+  (setq THEME_B7 (face-foreground 'line-number-current-line))
+  (setq THEME_B8 (face-foreground 'lazy-highlight))
 
+  (setq THEME_RED (face-foreground 'font-lock-preprocessor-face))
+  (setq THEME_ORANGE (face-foreground 'font-lock-warning-face))
+  (setq THEME_GREEN (face-foreground 'font-lock-function-name-face))
+  (setq THEME_YELLOW (face-foreground 'font-lock-string-face))
+  (setq THEME_VIOLET (face-foreground 'font-lock-constant-face))
+  (setq THEME_CYAN (face-foreground 'font-lock-type-face))
 
-# System
+  (setenv "EMACS_THEME_BG" THEME_BG)
+  (setenv "EMACS_THEME_FG" THEME_FG)
+  (setenv "EMACS_THEME_B0" THEME_B0)
+ ; (setenv "EMACS_THEME_B1" THEME_B1)
+  (setenv "EMACS_THEME_B2" THEME_B2)
+  (setenv "EMACS_THEME_B3" THEME_B3)
+  (setenv "EMACS_THEME_B4" THEME_B4)
+  (setenv "EMACS_THEME_B5" THEME_B5)
+  (setenv "EMACS_THEME_B6" THEME_B6)
+  (setenv "EMACS_THEME_B7" THEME_B7)
+  (setenv "EMACS_THEME_B8" THEME_B8)
 
-This configuration is platform-specific. Mind the `:tangle` condition in each code block.
+  (setenv "EMACS_THEME_RED" THEME_RED)
+  (setenv "EMACS_THEME_ORANGE" THEME_ORANGE)
+  (setenv "EMACS_THEME_GREEN" THEME_GREEN)
+  (setenv "EMACS_THEME_YELLOW" THEME_YELLOW)
+  (setenv "EMACS_THEME_VIOLDET" THEME_VIOLET)
+  (setenv "EMACS_THEME_CYAN" THEME_CYAN))
 
-This is an interactive function for shutdown, reboot and sleep. It will get bound to
-the power button later.
+;; Every time we change a theme we need to call the function above.
+(advice-add 'enable-theme :after #'db/extract-theme-colors)
+```
 
-    (unless (string-match "-[Mm]icrosoft" operating-system-release)
-      (defun db/power-menu ()
-        "Interactive menu for shutdown, reboot or sleep."
-        (interactive)
-        (let ((actions '("Shutdown" "Reboot" "Sleep")))
-          (setq action (ivy-completing-read "What do you want to do?" actions ))
-          (if (y-or-n-p (concat "Execute " action "? Unsaved progress will be lost. "))
-              (let ((default-directory "/sudo::"))
-                (cond ((equal action "Shutdown")
-                       (shell-command "shutdown -P now"))
-                      ((equal action "Reboot")
-                       (shell-command "reboot"))
-                      ((equal action "Sleep")
-                       (shell-command "zzz"))))))))
+System
+======
+
+This configuration is platform-specific. Mind the `:tangle` condition in
+each code block.
+
+This is an interactive function for shutdown, reboot and sleep. It will
+get bound to the power button later.
+
+``` {.commonlisp org-language="emacs-lisp"}
+(unless (string-match "-[Mm]icrosoft" operating-system-release)
+  (defun db/power-menu ()
+    "Interactive menu for shutdown, reboot or sleep."
+    (interactive)
+    (let ((actions '("Shutdown" "Reboot" "Sleep")))
+      (setq action (ivy-completing-read "What do you want to do?" actions ))
+      (if (y-or-n-p (concat "Execute " action "? Unsaved progress will be lost. "))
+          (let ((default-directory "/sudo::"))
+            (cond ((equal action "Shutdown")
+                   (shell-command "shutdown -P now"))
+                  ((equal action "Reboot")
+                   (shell-command "reboot"))
+                  ((equal action "Sleep")
+                   (shell-command "zzz"))))))))
+```
 
 Setting up `exwm` as a window manager.
 
-    (unless (string-match "-[Mm]icrosoft" operating-system-release)
-      (server-start)
-    
-      (defun db/run-in-background (command)
-        "Start an application in the background."
-        (let ((command-parts (split-string command "[ ]+")))
-          (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
-    
-      (use-package! exwm
-        :config
-        ;; Set the initial number of workspaces (they can also be created later).
-        (setq exwm-workspace-number 10)
-    
-        ;; Per application settings
-        (setq exwm-manage-configurations
-              '(((equal exwm-class-name "Blueman-manager")
-                 floating t
-                 floating-mode-line nil
-                 width 0.5
-                 height 0.5)
-    
-                ((equal exwm-class-name "Pavucontrol")
-                 floating t
-                 floating-mode-line nil
-                 width 0.5
-                 height 0.5)
-    
-                ((equal exwm-class-name "qutebrowser")
-                 workspace 0
-                 char-mode t)
-    
-                ((equal exwm-class-name "Steam") workspace 6)
-                ((equal exwm-class-name "discord") workspace 5)))
-    
-        ;; When EXWM starts up, do some extra confifuration
-        (add-hook 'exwm-init-hook
-                  (lambda ()
-                    ;; Start polybar
-                    (db/start-panel)
-    
-                    ;; Launch apps that will run in the background
-                    (db/run-in-background "pasystray")
-                    (db/run-in-background "blueman-applet")))
-    
-        ;; Use class names for all windows except Java and GIMP
-        (add-hook 'exwm-update-class-hook
-                  (lambda ()
-                    (unless (or (string-prefix-p "sun-awt-X11-" exwm-instance-name)
-                                (string= "gimp" exwm-instance-name))
-                      (exwm-workspace-rename-buffer exwm-class-name))))
-        (add-hook 'exwm-update-title-hook
-                  (lambda ()
-                    (when (or (not exwm-instance-name)
-                              (string-prefix-p "sun-awt-X11-" exwm-instance-name)
-                              (string= "gimp" exwm-instance-name))
-                      (exwm-workspace-rename-buffer exwm-title))))
-    
-        ;; Disable the default key map
-        (define-key exwm-mode-map (kbd "C-c") nil)
-    
-        ;; Global key bindings
-        (setq exwm-input-global-keys
-              `(
-                ;; Bind "s-0 -> s-9" to workspaces.
-                ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch 0)))
-                ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch 1)))
-                ([?\s-3] . (lambda () (interactive) (exwm-workspace-switch 2)))
-                ([?\s-4] . (lambda () (interactive) (exwm-workspace-switch 3)))
-                ([?\s-5] . (lambda () (interactive) (exwm-workspace-switch 4)))
-                ([?\s-6] . (lambda () (interactive) (exwm-workspace-switch 5)))
-                ([?\s-7] . (lambda () (interactive) (exwm-workspace-switch 6)))
-                ([?\s-8] . (lambda () (interactive) (exwm-workspace-switch 7)))
-                ([?\s-9] . (lambda () (interactive) (exwm-workspace-switch 8)))
-                ([?\s-0] . (lambda () (interactive) (exwm-workspace-switch 9)))
-    
-                ;; NOT NEEDED IN MASTER/STACK LAYOUT
-                ;; Move focus between windows (vim and arrow keys)
-                ;; ([s-left] . windmove-left)
-                ;; ([?\s-h]  . windmove-left)
-                ;; ([s-right] . windmove-right)
-                ;; ([?\s-l]   . windmove-right)
-                ;; ([s-up] . windmove-up)
-                ;; ([?\s-k] . windmove-up)
-                ;; ([s-down] . windmove-down)
-                ;; ([?\s-j] . windmove-down)
-    
-                ;; ;; Move windows
-                ;; ([M-s-left] . windmove-swap-states-left)
-                ;; ([M-s-right] . windmove-swap-states-right)
-                ;; ([M-s-up] . windmove-swap-states-up)
-                ;; ([M-s-down] . windmove-swap-states-down)
-    
-                ([?\s-&] . (lambda (command)
-    		         (interactive (list (read-shell-command "$ ")))
-    		         (start-process-shell-command command nil command)))
-    
-                ;; Master/Stack layout
-              ;;; Arrange the windows if needed
-                ([?\s-a] . edwina-arrange)
-    
-              ;;; Create a new window
-                ([?\s-w] . edwina-clone-window)
-    
-              ;;; delete the current window
-                ([?\s-d] . edwina-delete-window)
-    
-              ;;; Move down the hierarchy
-                ([?\s-e] . edwina-select-next-window) ;; move focus
-                ([?\s-E] . edwina-swap-next-window) ;; move window
-    
-              ;;; Move down the hierarchy
-                ([?\s-q] . edwina-select-previous-window) ;; move focus
-                ([?\s-Q] . edwina-swap-previous-window) ;; move window
-    
-              ;;; Swap current window with master
-                ([?\s-s] . edwina-zoom)
-    
-                ;; Launch applications
-                ([?\s- ] . counsel-linux-app)
-    
-                ;; Launch terminal
-                ([s-return] . +vterm/here)
-    
-                ;; Enter passwords
-                ([?\s-p] . ivy-pass)
-    
-                ;; char/line-mode stuff
-                ([?\s-i] . exwm-input-release-keyboard)
-    
-              ;;; Enter line mode and redirect input to emacs
-                ([?\s-n] . (lambda () (interactive)
-                             (exwm-reset)
-                             (setq exwm-input-line-mode-passthrough t)))
-    
-              ;;; Only enter line mode
-                ([?\s-N] . (lambda () (interactive)
-                             (exwm-reset)
-                             (setq exwm-input-line-mode-passthrough nil)))
-    
-              ;;; Kill a window
-                ([?\s-D] . (lambda () (interactive)
-                             (kill-buffer (current-buffer))))
-    
-                ;; full-screen / floating
-                ([?\s-f] . exwm-layout-toggle-fullscreen)
-                ([?\s-F] . exwm-floating-toggle-floating)
-    
-                ;; mode-line / move window
-                ([?\s-m] . exwm-layout-toggle-mode-line)
-                ([?\s-M] . exwm-workspace-move-window)
-    
-                ;; Media keys
-                ([XF86PowerOff] . db/power-menu)
-                ([XF86Sleep]    . db/power-menu)
-                ))
-    
-        ;; Set s-c and s-v to C-s and C-v in X application
-        (setq exwm-input-simulation-keys
-              '(([?\s-c] . [C-c])
-                ([\?s-v] . [C-v])))
-    
-        ;; Enable EXWM
-        (exwm-enable)))
+``` {.commonlisp org-language="emacs-lisp"}
+(unless (string-match "-[Mm]icrosoft" operating-system-release)
+  (server-start)
+
+  (defun db/run-in-background (command)
+    "Start an application in the background."
+    (let ((command-parts (split-string command "[ ]+")))
+      (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+
+  (use-package! exwm
+    :config
+    ;; Set the initial number of workspaces (they can also be created later).
+    (setq exwm-workspace-number 10)
+
+    ;; Per application settings
+    (setq exwm-manage-configurations
+          '(((equal exwm-class-name "Blueman-manager")
+             floating t
+             floating-mode-line nil
+             width 0.5
+             height 0.5)
+
+            ((equal exwm-class-name "Pavucontrol")
+             floating t
+             floating-mode-line nil
+             width 0.5
+             height 0.5)
+
+            ((equal exwm-class-name "qutebrowser")
+             workspace 0
+             char-mode t)
+
+            ((equal exwm-class-name "Steam") workspace 6)
+            ((equal exwm-class-name "discord") workspace 5)))
+
+    ;; When EXWM starts up, do some extra confifuration
+    (add-hook 'exwm-init-hook
+              (lambda ()
+                ;; Start polybar
+                (db/start-panel)
+
+                ;; Launch apps that will run in the background
+                (db/run-in-background "pasystray")
+                (db/run-in-background "blueman-applet")))
+
+    ;; Use class names for all windows except Java and GIMP
+    (add-hook 'exwm-update-class-hook
+              (lambda ()
+                (unless (or (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+                            (string= "gimp" exwm-instance-name))
+                  (exwm-workspace-rename-buffer exwm-class-name))))
+    (add-hook 'exwm-update-title-hook
+              (lambda ()
+                (when (or (not exwm-instance-name)
+                          (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+                          (string= "gimp" exwm-instance-name))
+                  (exwm-workspace-rename-buffer exwm-title))))
+
+    ;; Disable the default key map
+    (define-key exwm-mode-map (kbd "C-c") nil)
+
+    ;; Global key bindings
+    (setq exwm-input-global-keys
+          `(
+            ;; Bind "s-0 -> s-9" to workspaces.
+            ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch 0)))
+            ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch 1)))
+            ([?\s-3] . (lambda () (interactive) (exwm-workspace-switch 2)))
+            ([?\s-4] . (lambda () (interactive) (exwm-workspace-switch 3)))
+            ([?\s-5] . (lambda () (interactive) (exwm-workspace-switch 4)))
+            ([?\s-6] . (lambda () (interactive) (exwm-workspace-switch 5)))
+            ([?\s-7] . (lambda () (interactive) (exwm-workspace-switch 6)))
+            ([?\s-8] . (lambda () (interactive) (exwm-workspace-switch 7)))
+            ([?\s-9] . (lambda () (interactive) (exwm-workspace-switch 8)))
+            ([?\s-0] . (lambda () (interactive) (exwm-workspace-switch 9)))
+
+            ;; NOT NEEDED IN MASTER/STACK LAYOUT
+            ;; Move focus between windows (vim and arrow keys)
+            ;; ([s-left] . windmove-left)
+            ;; ([?\s-h]  . windmove-left)
+            ;; ([s-right] . windmove-right)
+            ;; ([?\s-l]   . windmove-right)
+            ;; ([s-up] . windmove-up)
+            ;; ([?\s-k] . windmove-up)
+            ;; ([s-down] . windmove-down)
+            ;; ([?\s-j] . windmove-down)
+
+            ;; ;; Move windows
+            ;; ([M-s-left] . windmove-swap-states-left)
+            ;; ([M-s-right] . windmove-swap-states-right)
+            ;; ([M-s-up] . windmove-swap-states-up)
+            ;; ([M-s-down] . windmove-swap-states-down)
+
+            ([?\s-&] . (lambda (command)
+                 (interactive (list (read-shell-command "$ ")))
+                 (start-process-shell-command command nil command)))
+
+            ;; Master/Stack layout
+          ;;; Arrange the windows if needed
+            ([?\s-a] . edwina-arrange)
+
+          ;;; Create a new window
+            ([?\s-w] . edwina-clone-window)
+
+          ;;; delete the current window
+            ([?\s-d] . edwina-delete-window)
+
+          ;;; Move down the hierarchy
+            ([?\s-e] . edwina-select-next-window) ;; move focus
+            ([?\s-E] . edwina-swap-next-window) ;; move window
+
+          ;;; Move down the hierarchy
+            ([?\s-q] . edwina-select-previous-window) ;; move focus
+            ([?\s-Q] . edwina-swap-previous-window) ;; move window
+
+          ;;; Swap current window with master
+            ([?\s-s] . edwina-zoom)
+
+            ;; Launch applications
+            ([?\s- ] . counsel-linux-app)
+
+            ;; Launch terminal
+            ([s-return] . +vterm/here)
+
+            ;; Enter passwords
+            ([?\s-p] . ivy-pass)
+
+            ;; char/line-mode stuff
+            ([?\s-i] . exwm-input-release-keyboard)
+
+          ;;; Enter line mode and redirect input to emacs
+            ([?\s-n] . (lambda () (interactive)
+                         (exwm-reset)
+                         (setq exwm-input-line-mode-passthrough t)))
+
+          ;;; Only enter line mode
+            ([?\s-N] . (lambda () (interactive)
+                         (exwm-reset)
+                         (setq exwm-input-line-mode-passthrough nil)))
+
+          ;;; Kill a window
+            ([?\s-D] . (lambda () (interactive)
+                         (kill-buffer (current-buffer))))
+
+            ;; full-screen / floating
+            ([?\s-f] . exwm-layout-toggle-fullscreen)
+            ([?\s-F] . exwm-floating-toggle-floating)
+
+            ;; mode-line / move window
+            ([?\s-m] . exwm-layout-toggle-mode-line)
+            ([?\s-M] . exwm-workspace-move-window)
+
+            ;; Media keys
+            ([XF86PowerOff] . db/power-menu)
+            ([XF86Sleep]    . db/power-menu)
+            ))
+
+    ;; Set s-c and s-v to C-s and C-v in X application
+    (setq exwm-input-simulation-keys
+          '(([?\s-c] . [C-c])
+            ([\?s-v] . [C-v])))
+
+    ;; Enable EXWM
+    (exwm-enable)))
+```
 
 We need to configure `randr` for multiple monitor support.
 
-    (unless (string-match "-[Mm]icrosoft" operating-system-release)
-      (require 'exwm-randr)
-    
-      (setq exwm-randr-workspace-monitor-plist
-            '(0 "DP-0.8"
-                1 "DP-0.1.8"
-                2 "DP-0.1.8"
-                3 "DP-0.8"
-                4 "DP-0.8"
-                5 "DP-0.8"
-                6 "DP-0.8"
-                7 "DP-0.8"))
-    
-      (add-hook 'exwm-randr-screen-change-hook
-                (lambda ()
-                  (start-process-shell-command
-                   "xrandr" nil "xrandr --output DP-0.8 --left-of DP-0.1.8 --auto")))
-    
-      (exwm-randr-enable))
+``` {.commonlisp org-language="emacs-lisp"}
+(unless (string-match "-[Mm]icrosoft" operating-system-release)
+  (require 'exwm-randr)
 
-`polybar` needs some configuration to show the current exwm workspace correctly.
+  (setq exwm-randr-workspace-monitor-plist
+        '(0 "DP-0.8"
+            1 "DP-0.1.8"
+            2 "DP-0.1.8"
+            3 "DP-0.8"
+            4 "DP-0.8"
+            5 "DP-0.8"
+            6 "DP-0.8"
+            7 "DP-0.8"))
 
-    (unless (string-match "-[Mm]icrosoft" operating-system-release)
-      (defvar db/polybar-process nil
-        "Holds the process of the running Polybar instance, if any")
-    
-      (defun db/kill-panel ()
-        "Kill the polybar panel"
-        (interactive)
-        (when db/polybar-process
-          (ignore-errors
-            (kill-process db/polybar-process)))
-        (setq db/polybar-process nil))
-    
-      (defun db/start-panel (&optional theme)
-        "Start the polybar panel"
-        (interactive)
-        (db/kill-panel)
-        (setq db/polybar-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-single.ini single")))
-    
-      (setq WORKSPACE_1 ""
-            WORKSPACE_2 ""
-            WORKSPACE_3 ""
-            WORKSPACE_4 ""
-            WORKSPACE_5 ""
-            WORKSPACE_6 ""
-            WORKSPACE_7 "")
-    
-      ;; Setting workspaces for polybar
-      (defun dw/polybar-exwm-workspace ()
-        "Send the correct string to polybar for the currently selected workspace."
-        (pcase exwm-workspace-current-index
-          (0 (concat "%{F" THEME_YELLOW "}" WORKSPACE_1 " WWW%{F-}   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
-          (1 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_YELLOW "}" WORKSPACE_2 " TERM%{F-}   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
-          (2 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_YELLOW "}" WORKSPACE_3 " CODE%{F-}   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
-          (3 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_YELLOW "}" WORKSPACE_4 " AGENDA%{F-}   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
-          (4 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_YELLOW "}" WORKSPACE_5 " MUSIC%{F-}   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
-          (5 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_YELLOW "}" WORKSPACE_6 " CHAT%{F-}   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
-          (6 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_YELLOW "}" WORKSPACE_7 " GAMES%{F-}"))))
-    
-      (defun dw/send-polybar-hook (name number)
-        "Hook for polybar to update workspaces"
-        (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" name number)))
-    
-      (defun dw/update-polybar-exwm ()
-        "Tell polybar to update the workspaces"
-        (dw/send-polybar-hook "exwm" 1))
-    
-      ;; Send the hook every time a workspace changes.
-      (add-hook 'exwm-workspace-switch-hook #'dw/update-polybar-exwm))
+  (add-hook 'exwm-randr-screen-change-hook
+            (lambda ()
+              (start-process-shell-command
+               "xrandr" nil "xrandr --output DP-0.8 --left-of DP-0.1.8 --auto")))
+
+  (exwm-randr-enable))
+```
+
+`polybar` needs some configuration to show the current exwm workspace
+correctly.
+
+``` {.commonlisp org-language="emacs-lisp"}
+(unless (string-match "-[Mm]icrosoft" operating-system-release)
+  (defvar db/polybar-process nil
+    "Holds the process of the running Polybar instance, if any")
+
+  (defun db/kill-panel ()
+    "Kill the polybar panel"
+    (interactive)
+    (when db/polybar-process
+      (ignore-errors
+        (kill-process db/polybar-process)))
+    (setq db/polybar-process nil))
+
+  (defun db/start-panel (&optional theme)
+    "Start the polybar panel"
+    (interactive)
+    (db/kill-panel)
+    (setq db/polybar-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-single.ini single")))
+
+  (setq WORKSPACE_1 ""
+        WORKSPACE_2 ""
+        WORKSPACE_3 ""
+        WORKSPACE_4 ""
+        WORKSPACE_5 ""
+        WORKSPACE_6 ""
+        WORKSPACE_7 "")
+
+  ;; Setting workspaces for polybar
+  (defun dw/polybar-exwm-workspace ()
+    "Send the correct string to polybar for the currently selected workspace."
+    (pcase exwm-workspace-current-index
+      (0 (concat "%{F" THEME_YELLOW "}" WORKSPACE_1 " WWW%{F-}   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
+      (1 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_YELLOW "}" WORKSPACE_2 " TERM%{F-}   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
+      (2 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_YELLOW "}" WORKSPACE_3 " CODE%{F-}   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
+      (3 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_YELLOW "}" WORKSPACE_4 " AGENDA%{F-}   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
+      (4 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_YELLOW "}" WORKSPACE_5 " MUSIC%{F-}   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
+      (5 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_YELLOW "}" WORKSPACE_6 " CHAT%{F-}   %{F" THEME_B6 "}" WORKSPACE_7 "%{F-} GAMES"))
+      (6 (concat "%{F" THEME_B6 "}" WORKSPACE_1 "%{F-} WWW   %{F" THEME_B6 "}" WORKSPACE_2 "%{F-} TERM   %{F" THEME_B6 "}" WORKSPACE_3 "%{F-} CODE   %{F" THEME_B6 "}" WORKSPACE_4 "%{F-} AGENDA   %{F" THEME_B6 "}" WORKSPACE_5 "%{F-} MUSIC   %{F" THEME_B6 "}" WORKSPACE_6 "%{F-} CHAT   %{F" THEME_YELLOW "}" WORKSPACE_7 " GAMES%{F-}"))))
+
+  (defun dw/send-polybar-hook (name number)
+    "Hook for polybar to update workspaces"
+    (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" name number)))
+
+  (defun dw/update-polybar-exwm ()
+    "Tell polybar to update the workspaces"
+    (dw/send-polybar-hook "exwm" 1))
+
+  ;; Send the hook every time a workspace changes.
+  (add-hook 'exwm-workspace-switch-hook #'dw/update-polybar-exwm))
+```
 
 Reload `polybar` if the theme changes.
 
-    (unless (string-match "-[Mm]icrosoft" operating-system-release)
-      (advice-add 'enable-theme :after #'db/start-panel))
+``` {.commonlisp org-language="emacs-lisp"}
+(unless (string-match "-[Mm]icrosoft" operating-system-release)
+  (advice-add 'enable-theme :after #'db/start-panel))
+```
 
 Set up window manager with `edwina` for a master/stack layout.
 
-    (use-package! edwina
-      :config
-      (setq display-buffer-base-action '(display-buffer-below-selected))
-      (edwina-mode 1))
+``` {.commonlisp org-language="emacs-lisp"}
+(use-package! edwina
+  :config
+  (setq display-buffer-base-action '(display-buffer-below-selected))
+  (edwina-mode 1))
+```
 
 Binding `PRINT_SCREEN` to execute `imgur.el`.
 
-    (unless (string-match "-[Mm]icrosoft" operating-system-release)
-      (global-set-key [print] (lambda () (interactive) (imgur-init-screenshot))))
+``` {.commonlisp org-language="emacs-lisp"}
+(unless (string-match "-[Mm]icrosoft" operating-system-release)
+  (global-set-key [print] (lambda () (interactive) (imgur-init-screenshot))))
+```
 
-
-# IDE
+IDE
+===
 
 General settings for `lsp-mode`
 
-    (after! lsp-mode
-      (setq lsp-auto-guess-root nil
-            lsp-file-watch-threshold 10000))
+``` {.commonlisp org-language="emacs-lisp"}
+(after! lsp-mode
+  (setq lsp-auto-guess-root nil
+        lsp-file-watch-threshold 10000))
+```
 
+`lsp-ui`
+--------
 
-## `lsp-ui`
+``` {.commonlisp org-language="emacs-lisp"}
+(after! lsp-ui
+  (setq lsp-ui-peek-list-width 100
+        lsp-ui-peek-fontify 'always
+        lsp-ui-doc-position 'top
+        lsp-ui-doc-alignment 'window
+        lsp-ui-doc-max-height 30
+        lsp-ui-doc-max-width 90
+        lsp-ui-doc-border "white"
+        lsp-ui-imenu-enable nil))
 
-    (after! lsp-ui
-      (setq lsp-ui-peek-list-width 100
-            lsp-ui-peek-fontify 'always
-            lsp-ui-doc-position 'top
-            lsp-ui-doc-alignment 'window
-            lsp-ui-doc-max-height 30
-            lsp-ui-doc-max-width 90
-            lsp-ui-doc-border "white"
-            lsp-ui-imenu-enable nil))
-    
-    ;; SPC-c-K should show documentation for symbol at point.
-    (map! :leader
-          :desc "Show documentation" "c K" 'lsp-ui-doc-show)
+;; SPC-c-K should show documentation for symbol at point.
+(map! :leader
+      :desc "Show documentation" "c K" 'lsp-ui-doc-show)
+```
 
-
-## `lsp-docker`
+`lsp-docker`
+------------
 
 Get the docker path for a given real path (currently not needed)
 
-    ;; (defun db/get-docker-path (path-mappings project-root)
-    ;;   "Returns the path inside a docker container
-    ;;   for a given file using lsp-docker-path-mappings"
-    ;;   (let ((current-project  ()))
-    ;;     (dolist (project path-mappings)
-    ;;       (if (string= (concat (car project) "/") project-root)
-    ;;           (push (cons (cdr project) (car project)) current-project)))
-    ;;     (concat (car (car current-project)) "/" (file-relative-name buffer-file-name project-root))))
+``` {.commonlisp org-language="emacs-lisp"}
+;; (defun db/get-docker-path (path-mappings project-root)
+;;   "Returns the path inside a docker container
+;;   for a given file using lsp-docker-path-mappings"
+;;   (let ((current-project  ()))
+;;     (dolist (project path-mappings)
+;;       (if (string= (concat (car project) "/") project-root)
+;;           (push (cons (cdr project) (car project)) current-project)))
+;;     (concat (car (car current-project)) "/" (file-relative-name buffer-file-name project-root))))
+```
 
 Initialize `lsp-docker`
 
-    (use-package! lsp-docker
-      :config
-      (setq lsp-docker-container-name "lsp-langserver"
-            lsp-docker-image-name lsp-docker-container-name
-            lsp-docker-path-mappings
-            '(("/bin" . "/usr/local/bin/host")          ; We need this to provide acces to hosts apps for sh linters.
-              ("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
-              ("/home/demis/.local/share/git/laravel" . "/projects/laravel")
-              ("/home/demis/.local/share/git/lsp-main-dev" . "/projects/lsp-main-dev")))
-    
-      (lsp-docker-init-clients
-       :docker-image-id lsp-docker-image-name
-       :docker-container-name lsp-docker-container-name
-       :client-packages '(lsp-bash lsp-dockerfile lsp-php)
-       :client-configs (list
-                        (list :server-id 'bash-ls :docker-server-id 'bashls-docker :server-command "bash-language-server start")
-                        (list :server-id 'iph :docker-server-id 'phpls-docker :server-command "intelephense --stdio")
-                        (list :server-id 'dockerfile-ls :docker-server-id 'dockerfilels-docker :server-command "docker-langserver --stdio"))
-       :path-mappings lsp-docker-path-mappings))
+``` {.commonlisp org-language="emacs-lisp"}
+(use-package! lsp-docker
+  :config
+  (setq lsp-docker-container-name "lsp-langserver"
+        lsp-docker-image-name lsp-docker-container-name
+        lsp-docker-path-mappings
+        '(("/bin" . "/usr/local/bin/host")          ; We need this to provide acces to hosts apps for sh linters.
+          ("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
+          ("/home/demis/.local/share/git/laravel" . "/projects/laravel")
+          ("/home/demis/.local/share/git/lsp-main-dev" . "/projects/lsp-main-dev")))
 
-After `lsp-docker`, lets configure some new flycheck checkers and enable them.
+  (lsp-docker-init-clients
+   :docker-image-id lsp-docker-image-name
+   :docker-container-name lsp-docker-container-name
+   :client-packages '(lsp-bash lsp-dockerfile lsp-php)
+   :client-configs (list
+                    (list :server-id 'bash-ls :docker-server-id 'bashls-docker :server-command "bash-language-server start")
+                    (list :server-id 'iph :docker-server-id 'phpls-docker :server-command "intelephense --stdio")
+                    (list :server-id 'dockerfile-ls :docker-server-id 'dockerfilels-docker :server-command "docker-langserver --stdio"))
+   :path-mappings lsp-docker-path-mappings))
+```
 
-    (after! lsp-docker
-      ;;; bash, sh
-      (flycheck-define-checker sh-shellcheck-docker
-        "Use shellcheck inside a docker container"
-        :command ("docker" "exec" "-i"
-                  (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
-                  "shellcheck"
-                  "--format" "checkstyle"
-                  "--shell" (eval (symbol-name sh-shell))
-                  (option-flag "--external-sources"
-                               flycheck-shellcheck-follow-sources)
-                  (option "--exclude" flycheck-shellcheck-excluded-warnings list
-                          flycheck-option-comma-separated-list)
-                  "-")
-        :standard-input t
-        :modes sh-mode
-        :error-parser flycheck-parse-checkstyle
-        :error-filter (lambda (errors)
-                        (flycheck-remove-error-file-names "-" errors))
-        :predicate (lambda () (memq sh-shell '(bash ksh88 sh)))
-        :verify
-        (lambda (_)
-          (let ((supported (memq sh-shell '(bash ksh88 sh))))
-            (list (flycheck-verification-result-new
-                   :label (format "Shell %s supported" sh-shell)
-                   :message (if supported "yes" "no")
-                   :face (if supported 'success '(bold warning))))))
-        :error-explainer
-        (lambda (err)
-          (let ((error-code (flycheck-error-id err))
-                (url "https://github.com/koalaman/shellcheck/wiki/%S"))
-            (and error-code `(url . ,(format url error-code))))))
-    
-    ;;; zsh
-      (flycheck-define-checker sh-zsh-docker
-        "sh-zsh with docker support."
-        :command ("docker" "exec" "-i"
-                  (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
-                  "zshwrapper" (eval (db/get-docker-path lsp-docker-path-mappings (projectile-project-root)))
-                  (eval (buffer-file-name)))
-        :error-patterns
-        ((error line-start (file-name) ":" line ": " (message) line-end))
-        :modes sh-mode
-        :predicate (lambda () (eq sh-shell 'zsh))
-        :next-checkers ((warning . sh-shellcheck)))
-    
-      ;; Disable lsp checker and enable/select above checker for sh-mode
-      (add-hook! sh-mode
-        (add-to-list 'flycheck-checkers 'sh-shellcheck-docker)
-        (add-to-list 'flycheck-checkers 'sh-zsh-docker)
-        (add-to-list 'flycheck-disabled-checkers 'lsp)
-        (setq flycheck-checker 'sh-shellcheck-docker))
-    
-      ;; dockerfile
-      (flycheck-define-checker dockerfile-hadolint-docker
-        "A Dockerfile syntax checker using the hadolint.
-    See URL `http://github.com/hadolint/hadolint/'."
-        :command ("docker" "exec" "-i"
-                  (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
-                  "hadolint" "-")
-        :standard-input t
-        :error-patterns
-        ((error line-start
-                (file-name) ":" line ":" column " " (message)
-                line-end)
-         (warning line-start
-                  (file-name) ":" line " " (id (one-or-more alnum)) " " (message)
-                  line-end))
-        :error-filter
-        (lambda (errors)
-          (flycheck-sanitize-errors
-           (flycheck-remove-error-file-names "/dev/stdin" errors)))
-        :modes dockerfile-mode)
-    
-      (add-hook! dockerfile-mode
-        (add-to-list 'flycheck-checkers 'sh-hadolint-docker)
-        (add-to-list 'flycheck-disabled-checkers 'lsp)
-        (setq flycheck-checker 'sh-hadolint-docker)))
+After `lsp-docker`, lets configure some new flycheck checkers and enable
+them.
 
+``` {.commonlisp org-language="emacs-lisp"}
+(after! lsp-docker
+  ;;; bash, sh
+  (flycheck-define-checker sh-shellcheck-docker
+    "Use shellcheck inside a docker container"
+    :command ("docker" "exec" "-i"
+              (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+              "shellcheck"
+              "--format" "checkstyle"
+              "--shell" (eval (symbol-name sh-shell))
+              (option-flag "--external-sources"
+                           flycheck-shellcheck-follow-sources)
+              (option "--exclude" flycheck-shellcheck-excluded-warnings list
+                      flycheck-option-comma-separated-list)
+              "-")
+    :standard-input t
+    :modes sh-mode
+    :error-parser flycheck-parse-checkstyle
+    :error-filter (lambda (errors)
+                    (flycheck-remove-error-file-names "-" errors))
+    :predicate (lambda () (memq sh-shell '(bash ksh88 sh)))
+    :verify
+    (lambda (_)
+      (let ((supported (memq sh-shell '(bash ksh88 sh))))
+        (list (flycheck-verification-result-new
+               :label (format "Shell %s supported" sh-shell)
+               :message (if supported "yes" "no")
+               :face (if supported 'success '(bold warning))))))
+    :error-explainer
+    (lambda (err)
+      (let ((error-code (flycheck-error-id err))
+            (url "https://github.com/koalaman/shellcheck/wiki/%S"))
+        (and error-code `(url . ,(format url error-code))))))
 
-## `lsp-treemacs`
+;;; zsh
+  (flycheck-define-checker sh-zsh-docker
+    "sh-zsh with docker support."
+    :command ("docker" "exec" "-i"
+              (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+              "zshwrapper" (eval (db/get-docker-path lsp-docker-path-mappings (projectile-project-root)))
+              (eval (buffer-file-name)))
+    :error-patterns
+    ((error line-start (file-name) ":" line ": " (message) line-end))
+    :modes sh-mode
+    :predicate (lambda () (eq sh-shell 'zsh))
+    :next-checkers ((warning . sh-shellcheck)))
+
+  ;; Disable lsp checker and enable/select above checker for sh-mode
+  (add-hook! sh-mode
+    (add-to-list 'flycheck-checkers 'sh-shellcheck-docker)
+    (add-to-list 'flycheck-checkers 'sh-zsh-docker)
+    (add-to-list 'flycheck-disabled-checkers 'lsp)
+    (setq flycheck-checker 'sh-shellcheck-docker))
+
+  ;; dockerfile
+  (flycheck-define-checker dockerfile-hadolint-docker
+    "A Dockerfile syntax checker using the hadolint.
+See URL `http://github.com/hadolint/hadolint/'."
+    :command ("docker" "exec" "-i"
+              (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+              "hadolint" "-")
+    :standard-input t
+    :error-patterns
+    ((error line-start
+            (file-name) ":" line ":" column " " (message)
+            line-end)
+     (warning line-start
+              (file-name) ":" line " " (id (one-or-more alnum)) " " (message)
+              line-end))
+    :error-filter
+    (lambda (errors)
+      (flycheck-sanitize-errors
+       (flycheck-remove-error-file-names "/dev/stdin" errors)))
+    :modes dockerfile-mode)
+
+  (add-hook! dockerfile-mode
+    (add-to-list 'flycheck-checkers 'sh-hadolint-docker)
+    (add-to-list 'flycheck-disabled-checkers 'lsp)
+    (setq flycheck-checker 'sh-hadolint-docker)))
+```
+
+`lsp-treemacs`
+--------------
 
 Initial configuration for `treemacs`
 
-    (after! treemacs
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (setq treemacs-show-hidden-files t
-            treemacs-follow-after-init t
-            treemacs-silent-filewatch t
-            treemacs-silent-refresh t
-            treemacs-recenter-after-file-follow 'always))
+``` {.commonlisp org-language="emacs-lisp"}
+(after! treemacs
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (setq treemacs-show-hidden-files t
+        treemacs-follow-after-init t
+        treemacs-silent-filewatch t
+        treemacs-silent-refresh t
+        treemacs-recenter-after-file-follow 'always))
+```
 
 Configuration for `lsp-treemacs`
 
-    (with-eval-after-load 'lsp-treemacs
-      (setq lsp-treemacs-symbols-position-params
-            `((side . right)
-              (slot . 1)
-              (window-width . ,treemacs-width))))
+``` {.commonlisp org-language="emacs-lisp"}
+(with-eval-after-load 'lsp-treemacs
+  (setq lsp-treemacs-symbols-position-params
+        `((side . right)
+          (slot . 1)
+          (window-width . ,treemacs-width))))
+```
 
-Let&rsquo;s toggle the symbols sidebar with a function
+Let\'s toggle the symbols sidebar with a function
 
-    (defun db/lsp-treemacs-symbols-toggle ()
-      "Toggle the lsp-treemacs-symbols buffer."
-      (interactive)
-      (if (get-buffer "*LSP Symbols List*")
-          (kill-buffer "*LSP Symbols List*")
-        (progn (lsp-treemacs-symbols)
-               (other-window -1))))
-    
-    ;; bind lsp-treemacs toggle
-    (map! :leader
-          :desc "Toggle Symbols" "c S" #'db/lsp-treemacs-symbols-toggle)
+``` {.commonlisp org-language="emacs-lisp"}
+(defun db/lsp-treemacs-symbols-toggle ()
+  "Toggle the lsp-treemacs-symbols buffer."
+  (interactive)
+  (if (get-buffer "*LSP Symbols List*")
+      (kill-buffer "*LSP Symbols List*")
+    (progn (lsp-treemacs-symbols)
+           (other-window -1))))
 
+;; bind lsp-treemacs toggle
+(map! :leader
+      :desc "Toggle Symbols" "c S" #'db/lsp-treemacs-symbols-toggle)
+```
 
-## `flycheck`
+`flycheck`
+----------
 
 Configure the styling for on the fly error reporting with `flycheck`
 
-    (after! flycheck
-      (custom-set-faces!
-        `(flycheck-error :underline nil :box (:line-width 1 :color ,THEME_RED :style nil))
-        `(flycheck-warning :underline nil :box (:line-width 1 :color ,THEME_YELLOW :style nil))
-        `(flycheck-info :underline nil :box (:line-width 1 :color ,THEME_GREEN :style nil))))
+``` {.commonlisp org-language="emacs-lisp"}
+(after! flycheck
+  (custom-set-faces!
+    `(flycheck-error :underline nil :box (:line-width 1 :color ,THEME_RED :style nil))
+    `(flycheck-warning :underline nil :box (:line-width 1 :color ,THEME_YELLOW :style nil))
+    `(flycheck-info :underline nil :box (:line-width 1 :color ,THEME_GREEN :style nil))))
+```
 
+DOOM
+====
 
-# DOOM
+When using `SPC-b-B`, I want to see all buffers, not only workspace
+buffers.
 
-When using `SPC-b-B`, I want to see all buffers, not only workspace buffers.
+``` {.commonlisp org-language="emacs-lisp"}
+(after! persp-mode
+  (remove-hook 'persp-add-buffer-on-after-change-major-mode-filter-functions #'doom-unreal-buffer-p))
+```
 
-    (after! persp-mode
-      (remove-hook 'persp-add-buffer-on-after-change-major-mode-filter-functions #'doom-unreal-buffer-p))
+Application specific configuration
+==================================
 
+`counsel`
+---------
 
-# Application specific configuration
+When using `counsel-linux-app` as an app launcher, we only want to see
+the name and the comment for each application, not its full path.
 
+``` {.commonlisp org-language="emacs-lisp"}
+(use-package! counsel
+  :config
+  (setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-only))
+```
 
-## `counsel`
-
-When using `counsel-linux-app` as an app launcher, we only want to see the name and the comment for each application, not its full path.
-
-    (use-package! counsel
-      :config
-      (setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-only))
-
-
-## `dired`
+`dired`
+-------
 
 Lets customize the output of `ls`
 
-    (use-package! dired
-      :custom ((dired-listing-switches "-aAh --group-directories-first")))
+``` {.commonlisp org-language="emacs-lisp"}
+(use-package! dired
+  :custom ((dired-listing-switches "-aAh --group-directories-first")))
+```
 
 Use `dired-single` to only use one buffer for each dired process.
 
-    (use-package! dired-single)
+``` {.commonlisp org-language="emacs-lisp"}
+(use-package! dired-single)
+```
 
 We want icons next to folders and files in dired
 
-    (use-package! all-the-icons-dired
-      :hook (dired-mode . all-the-icons-dired-mode))
+``` {.commonlisp org-language="emacs-lisp"}
+(use-package! all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+```
 
-
-## `magit`
+`magit`
+-------
 
 Set the default clone directory for magit
 
-    (setq magit-clone-default-directory (concat (getenv "GITDIR") "/"))
+``` {.commonlisp org-language="emacs-lisp"}
+(setq magit-clone-default-directory (concat (getenv "GITDIR") "/"))
+```
 
+`mu4e`
+------
 
-## `mu4e`
+Let\'s set up the main mail account.
 
-Let&rsquo;s set up the main mail account.
-
-    (set-email-account! "db@minikn.xyz"
-      '((mu4e-sent-folder       . "/db@minikn.xyz/Sent")
-        (mu4e-drafts-folder     . "/db@minikn.xyz/Drafts")
-        (mu4e-trash-folder      . "/db@minikn.xyz/Trash")
-        (smtpmail-smtp-user     . "db@minikn.xyz")
-        (smtpmail-smtp-server   . "smtp.mailbox.org")
-        (smtpmail-smtp-service  . 587)
-        (mu4e-compose-signature . "Mit freundlichen Grüßen / Best regards\nDemis Balbach"))
-      t)
+``` {.commonlisp org-language="emacs-lisp"}
+(set-email-account! "db@minikn.xyz"
+  '((mu4e-sent-folder       . "/db@minikn.xyz/Sent")
+    (mu4e-drafts-folder     . "/db@minikn.xyz/Drafts")
+    (mu4e-trash-folder      . "/db@minikn.xyz/Trash")
+    (smtpmail-smtp-user     . "db@minikn.xyz")
+    (smtpmail-smtp-server   . "smtp.mailbox.org")
+    (smtpmail-smtp-service  . 587)
+    (mu4e-compose-signature . "Mit freundlichen Grüßen / Best regards\nDemis Balbach"))
+  t)
+```
 
 We need to specify the command for `mu4e` to sync our mail.
 
-    (after! mu4e
-      (setq mu4e-get-mail-command (concat "mbsync -a -c " (getenv "XDG_CONFIG_HOME") "/isync/mbsyncrc")))
+``` {.commonlisp org-language="emacs-lisp"}
+(after! mu4e
+  (setq mu4e-get-mail-command (concat "mbsync -a -c " (getenv "XDG_CONFIG_HOME") "/isync/mbsyncrc")))
+```
 
-Finally, we need to specify the `load-path` so emacs finds the executable.
+Finally, we need to specify the `load-path` so emacs finds the
+executable.
 
-    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+``` {.commonlisp org-language="emacs-lisp"}
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+```
 
+`org-mode`
+----------
 
-## `org-mode`
+``` {.commonlisp org-language="emacs-lisp"}
+(setq org-directory "~/org/"
+      org-todo-keywords '((type "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+      org-toto-keyword-faces
+      '(("TODO" :inherit 'font-lock-string-face :italic italic)
+        ("DONE" :inherit 'font-lock-method-face))
 
-    (setq org-directory "~/org/"
-          org-todo-keywords '((type "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
-          org-toto-keyword-faces
-          '(("TODO" :inherit 'font-lock-string-face :italic italic)
-            ("DONE" :inherit 'font-lock-method-face))
-    
-          ;; Set files to scan for todos
-          org-agenda-files (ignore-errors (directory-files +org-dir t "\\.org$" t)))
+      ;; Set files to scan for todos
+      org-agenda-files (ignore-errors (directory-files +org-dir t "\\.org$" t)))
+```
 
-
-## TODO `pass`
+[TODO]{.todo .TODO} `pass` {#pass}
+--------------------------
 
 Write functions
 
-    (defun db/pass-push ()
-      "Push passwords to git"
-      (interactive)
-      (message "push"))
-    
-    (defun db/pass-pull ()
-      "Pull passwords to git"
-      (interactive)
-      (message "pull"))
-    
-    (after! pass
-      (define-key! pass-mode-map
-        "p" #'db/pass-push
-        "P" #'db/pass-pull))
+``` {.commonlisp org-language="emacs-lisp"}
+(defun db/pass-push ()
+  "Push passwords to git"
+  (interactive)
+  (message "push"))
 
+(defun db/pass-pull ()
+  "Pull passwords to git"
+  (interactive)
+  (message "pull"))
 
-## `pinentry`
+(after! pass
+  (define-key! pass-mode-map
+    "p" #'db/pass-push
+    "P" #'db/pass-pull))
+```
 
-    ;; Enable loopback so that pinentry will pop up in emacs
-    (pinentry-start)
-    
-    ;; Start GPG agent with SSH support
-    (shell-command "gpg-connect-agent /bye")
-    
-    ;; Reload the GPG agent if pinentry hangs
-    (defun db/reload-gpg-agent ()
-      "Reload the GPG agent."
-      (interactive)
-      (shell-command "gpgconf --kill gpg-agent")
-      (message "Reloaded the GPG agent"))
-    
-    ;; Add keybinding to reload GPG agent
-    (map! :leader
-          :desc "Reload GPG agent" "g a" #'db/reload-gpg-agent)
+`pinentry`
+----------
 
+``` {.commonlisp org-language="emacs-lisp"}
+;; Enable loopback so that pinentry will pop up in emacs
+(pinentry-start)
 
-## `projectile`
+;; Start GPG agent with SSH support
+(shell-command "gpg-connect-agent /bye")
 
-    (after! projectile
-      (setq projectile-track-known-projects-automatically nil))
+;; Reload the GPG agent if pinentry hangs
+(defun db/reload-gpg-agent ()
+  "Reload the GPG agent."
+  (interactive)
+  (shell-command "gpgconf --kill gpg-agent")
+  (message "Reloaded the GPG agent"))
 
+;; Add keybinding to reload GPG agent
+(map! :leader
+      :desc "Reload GPG agent" "g a" #'db/reload-gpg-agent)
+```
 
-## TODO IRC
+`projectile`
+------------
+
+``` {.commonlisp org-language="emacs-lisp"}
+(after! projectile
+  (setq projectile-track-known-projects-automatically nil))
+```
+
+[TODO]{.todo .TODO} IRC {#irc}
+-----------------------
 
 Auth is not working for some reason.
 
-    (setq circe-network-options
-          `(("Freenode"
-             :use-tls t
-             :port 6697
-             :nick "minikN"
-             :host "chat.freenode.net"
-             :channels ("#nyxt" "#emacs" "#voidlinux")
-             :sasl-username ,(+pass-get-user "IRC/freenode.net")
-             :sasl-password (lambda (&rest _) (+pass-get-secret "IRC/freenode.net")))))
+``` {.commonlisp org-language="emacs-lisp"}
+(setq circe-network-options
+      `(("Freenode"
+         :use-tls t
+         :port 6697
+         :nick "minikN"
+         :host "chat.freenode.net"
+         :channels ("#nyxt" "#emacs" "#voidlinux")
+         :sasl-username ,(+pass-get-user "IRC/freenode.net")
+         :sasl-password (lambda (&rest _) (+pass-get-secret "IRC/freenode.net")))))
+```
 
+KILL Shell
+----------
 
-## KILL Shell
+``` {.commonlisp org-language="emacs-lisp"}
+;; Set default shell
+;; (defadvice ansi-term (before force-bash)
+;;   (interactive (list "/bin/zsh")))
+;; (ad-activate 'ansi-term)
 
-    ;; Set default shell
-    ;; (defadvice ansi-term (before force-bash)
-    ;;   (interactive (list "/bin/zsh")))
-    ;; (ad-activate 'ansi-term)
-    
-    ;; ;; Key binding for launching a shell buffer
-    ;; (global-set-key (kbd "<s-return>") 'ansi-term)
-
+;; ;; Key binding for launching a shell buffer
+;; (global-set-key (kbd "<s-return>") 'ansi-term)
+```
