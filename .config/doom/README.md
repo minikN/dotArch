@@ -16,9 +16,8 @@ title: Config
 
 This is the main user configuration for my DOOM Emacs setup.
 
-```{=org}
-#+MARKDOWN: [[_TOC_]]
-```
+[[_TOC_]]
+
 General
 =======
 
