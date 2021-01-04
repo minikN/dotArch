@@ -3,6 +3,7 @@
 
 !doom/
 !doom/**
+doom/config.el
 
 !zsh/
 !zsh/**

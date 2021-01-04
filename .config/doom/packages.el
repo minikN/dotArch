@@ -50,9 +50,6 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
-;; Determine the enviroment we are running on.
-(load! "userconfig/env")
-
 ;; Setup theme
 (package! emacs-doom-themes :recipe
   (:host github
@@ -61,11 +58,9 @@
 (package! solaire-mode)
 
 ;; Loading packages for linux only
-(if (equal ENV "linux")
+(unless (string-match "-[Mm]icrosoft" operating-system-release)
     (progn (package! exwm)
            (package! edwina)
-           ;(package! bluetooth)
-           ;(package! pulseaudio-control)
            (package! imgur
              :recipe (:host github :repo "minikN/imgur.el"))))
 
@@ -73,3 +68,6 @@
 (package! pinentry)
 (package! lsp-docker)
 (package! lsp-treemacs)
+(package! dired-single)
+(package! all-the-icons-dired)
+(package! emms)

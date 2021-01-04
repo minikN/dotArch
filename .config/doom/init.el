@@ -24,26 +24,25 @@
        ;;helm                  ; the *other* search engine for love and life
        ;;ido                   ; the other *other* search engine...
        (ivy
-       ;; +childframe
         +icons)                ; a search engine for love and life
 
        :ui
        ;;deft                  ; notational velocity for Emacs
-       ;;doom                    ; what makes DOOM look the way it does
+       ;;doom                  ; what makes DOOM look the way it does
        doom-dashboard          ; a nifty splash screen for Emacs
        doom-quit               ; DOOM quit-message prompts when you quit Emacs
        ;;fill-column           ; a `fill-column' indicator
        hl-todo                 ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        ;;indent-guides         ; highlighted indent columns
+       ligatures               ; ligatures and symbols to make your code pretty agai
        modeline                ; snazzy, Atom-inspired modeline, plus API
        nav-flash               ; blink the current line after jumping
        ;;neotree               ; a project drawer, like NERDTree for vim
        ophints                 ; highlight the region an operation acts on
        (popup +defaults)       ; tame sudden yet inevitable temporary windows
-       pretty-code           ; replace bits of code with pretty symbols
        ;;tabs                  ; an tab bar for Emacs
-       (treemacs                ; a project drawer, like neotree but cooler
+       (treemacs               ; a project drawer, like neotree but cooler
         :tools magit
         :ui workspaces)
        ;;unicode               ; extended unicode support for various languages
@@ -76,12 +75,12 @@
        :term
        ;;eshell                ; a consistent, cross-platform shell (WIP)
        ;;shell                 ; a terminal REPL for Emacs
-       term                    ; terminals in Emacs
-       ;;vterm                 ; another terminals in Emacs
+       ;;term                  ; terminals in Emacs
+       vterm                   ; another terminals in Emacs
 
        :checkers
        (syntax
-        +childframe)                  ; tasing you for every semicolon you forget
+        +childframe)           ; tasing you for every semicolon you forget
        ;;spell                 ; tasing you for misspelling mispelling
        ;;grammar               ; tasing grammar mistake every you make
 
@@ -185,10 +184,10 @@
 
        :app
        ;;calendar
-       irc                   ; how neckbeards socialize
+       irc                     ; how neckbeards socialize
        ;;(rss +org)            ; emacs as an RSS reader
        ;;twitter               ; twitter client https://twitter.com/vnought
 
        :config
-       ;;literate
+       literate
        (default +bindings +smartparens))
