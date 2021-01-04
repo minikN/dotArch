@@ -12,13 +12,13 @@ sync' after modifying this file!
 Here are some additional functions/macros that could help you configure Doom:
 
 #+begin_src emacs-lisp
-;; - ~load!' for loading external *.el files relative to this one
-;; - ~use-package' for configuring packages
-;; - ~after!' for running code after a package has loaded
-;; - ~add-load-path!' for adding directories to the ~load-path', relative to
-;;   this file. Emacs searches the ~load-path' when you load packages with
-;;   ~require' or ~use-package'.
-;; - ~map!' for binding new keys
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
+;; - `map!' for binding new keys
 #+end_src
 
 To get information about any of these functions/macros, move the cursor over
@@ -48,8 +48,8 @@ font string.
 (setq doom-font (font-spec :family "Cascadia Mono" :size 14))
 #+end_src
 
-This determines the style of line numbers in effect. If set to ~nil', line
-numbers are disabled. For relative line numbers, set this to ~relative'.
+This determines the style of line numbers in effect. If set to `nil`, line
+numbers are disabled. For relative line numbers, set this to `relative`.
 #+begin_src emacs-lisp
 (setq display-line-numbers-type t)
 #+end_src
@@ -195,7 +195,7 @@ Setting up ~exwm~ as a window manager.
   (defun db/run-in-background (command)
     "Start an application in the background."
     (let ((command-parts (split-string command "[ ]+")))
-      (apply #'call-process ~(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+      (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
 
   (use-package! exwm
     :config
@@ -251,7 +251,7 @@ Setting up ~exwm~ as a window manager.
 
     ;; Global key bindings
     (setq exwm-input-global-keys
-          ~(
+          `(
             ;; Bind "s-0 -> s-9" to workspaces.
             ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch 0)))
             ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch 1)))
@@ -542,7 +542,7 @@ After ~lsp-docker~, lets configure some new flycheck checkers and enable them.
     (lambda (err)
       (let ((error-code (flycheck-error-id err))
             (url "https://github.com/koalaman/shellcheck/wiki/%S"))
-        (and error-code ~(url . ,(format url error-code))))))
+        (and error-code `(url . ,(format url error-code))))))
 
 ;;; zsh
   (flycheck-define-checker sh-zsh-docker
@@ -567,7 +567,7 @@ After ~lsp-docker~, lets configure some new flycheck checkers and enable them.
   ;; dockerfile
   (flycheck-define-checker dockerfile-hadolint-docker
     "A Dockerfile syntax checker using the hadolint.
-See URL ~http://github.com/hadolint/hadolint/'."
+See URL `http://github.com/hadolint/hadolint/'."
     :command ("docker" "exec" "-i"
               (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
               "hadolint" "-")
@@ -608,7 +608,7 @@ Configuration for ~lsp-treemacs~
 #+begin_src emacs-lisp
 (with-eval-after-load 'lsp-treemacs
   (setq lsp-treemacs-symbols-position-params
-        ~((side . right)
+        `((side . right)
           (slot . 1)
           (window-width . ,treemacs-width))))
 #+end_src
@@ -632,9 +632,9 @@ Configure the styling for on the fly error reporting with ~flycheck~
 #+begin_src emacs-lisp
 (after! flycheck
   (custom-set-faces!
-    ~(flycheck-error :underline nil :box (:line-width 1 :color ,THEME_RED :style nil))
-    ~(flycheck-warning :underline nil :box (:line-width 1 :color ,THEME_YELLOW :style nil))
-    ~(flycheck-info :underline nil :box (:line-width 1 :color ,THEME_GREEN :style nil))))
+    `(flycheck-error :underline nil :box (:line-width 1 :color ,THEME_RED :style nil))
+    `(flycheck-warning :underline nil :box (:line-width 1 :color ,THEME_YELLOW :style nil))
+    `(flycheck-info :underline nil :box (:line-width 1 :color ,THEME_GREEN :style nil))))
 #+end_src
 
 * DOOM
@@ -756,7 +756,7 @@ Write functions
 Auth is not working for some reason.
 #+begin_src emacs-lisp
 (setq circe-network-options
-      ~(("Freenode"
+      `(("Freenode"
          :use-tls t
          :port 6697
          :nick "minikN"
