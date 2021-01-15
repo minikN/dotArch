@@ -1,17 +1,12 @@
 #+TITLE:    Config
 #+AUTHOR:   Demis Balbach
 #+EMAIL:    db@minikn.xyz
-#+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes :results silent :padline no
-#+OPTIONS: toc:nil
-#+EXPORT_FILE_NAME: README.md
 
 #+BEGIN_SRC emacs-lisp
 ;; -*- lexical-binding: t -*-
 #+END_SRC
 
 This is the main user configuration for my DOOM Emacs setup.
-
-#+MARKDOWN: [[_TOC_]]
 
 * General
 Place your private configuration here! Remember, you do not need to run 'doom
@@ -503,7 +498,7 @@ Initialize ~lsp-docker~
         lsp-docker-path-mappings
         '(("/bin" . "/usr/local/bin/host")          ; We need this to provide acces to hosts apps for sh linters.
           ("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
-          ("/home/demis/.local/share/git/laravel" . "/projects/laravel")
+          ("/home/demis/.local/share/git/dbase-livemonitor" . "/projects/dbase-livemonitor")
           ("/home/demis/.local/share/git/lsp-main-dev" . "/projects/lsp-main-dev")))
 
   (lsp-docker-init-clients
@@ -664,7 +659,7 @@ When using ~counsel-linux-app~ as an app launcher, we only want to see the name 
 Lets customize the output of ~ls~
 #+begin_src emacs-lisp
 (use-package! dired
-  :custom ((dired-listing-switches "-aAh --group-directories-first")))
+  :custom ((dired-listing-switches "-laAh --group-directories-first")))
 #+end_src
 
 Use ~dired-single~ to only use one buffer for each dired process.
