@@ -71,3 +71,4 @@
 (package! dired-single)
 (package! all-the-icons-dired)
 (package! emms)
+(package! yaml-mode)
