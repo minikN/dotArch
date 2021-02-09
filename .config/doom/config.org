@@ -41,7 +41,7 @@ Setting the font globally.
 Doom exposes five (optional) variables for controlling fonts in Doom. Here
 are the three important ones:
 
- - ~doom-font~
+- ~doom-font~
 - ~doom-variable-pitch-font~
 - ~doom-big-font~ -- used for ~doom-big-font-mode~; use this for presentations or streaming.
 
@@ -129,7 +129,7 @@ So lets extract them into environment variables.
   (setq THEME_BG (face-background 'default))
   (setq THEME_FG (face-foreground 'default))
   (setq THEME_B0 (face-foreground 'highlight))
- ; (setq THEME_B1 (face-background 'highlight-indentation-current-column-face))
+  (setq THEME_B1 (face-foreground 'default))
   (setq THEME_B2 (face-background 'region))
   (setq THEME_B3 (face-background 'tooltip))
   (setq THEME_B4 (face-foreground 'fringe))
@@ -148,7 +148,7 @@ So lets extract them into environment variables.
   (setenv "EMACS_THEME_BG" THEME_BG)
   (setenv "EMACS_THEME_FG" THEME_FG)
   (setenv "EMACS_THEME_B0" THEME_B0)
- ; (setenv "EMACS_THEME_B1" THEME_B1)
+  (setenv "EMACS_THEME_B1" THEME_B1)
   (setenv "EMACS_THEME_B2" THEME_B2)
   (setenv "EMACS_THEME_B3" THEME_B3)
   (setenv "EMACS_THEME_B4" THEME_B4)
@@ -165,7 +165,7 @@ So lets extract them into environment variables.
   (setenv "EMACS_THEME_CYAN" THEME_CYAN))
 
 ;; Every time we change a theme we need to call the function above.
-(advice-add 'enable-theme :after #'db/extract-theme-colors)
+  (advice-add 'enable-theme :after #'db/extract-theme-colors)
 #+end_src
 
 * System
@@ -363,19 +363,19 @@ We need to configure ~randr~ for multiple monitor support.
   (require 'exwm-randr)
 
   (setq exwm-randr-workspace-monitor-plist
-        '(0 "DP-0.8"
-            1 "DP-0.1.8"
-            2 "DP-0.1.8"
-            3 "DP-0.8"
-            4 "DP-0.8"
-            5 "DP-0.8"
-            6 "DP-0.8"
-            7 "DP-0.8"))
+        '(0 "DP-0"
+            1 "DP-0"
+            2 "HDMI-0"
+            3 "HDMI-0"
+            4 "HDMI-0"
+            5 "DP-0"
+            6 "DP-0"
+            7 "HDMI-0"))
 
   (add-hook 'exwm-randr-screen-change-hook
             (lambda ()
               (start-process-shell-command
-               "xrandr" nil "xrandr --output DP-0.8 --left-of DP-0.1.8 --auto")))
+               "xrandr" nil "xrandr --output DP-0 --left-of HDMI-0 --auto")))
 
   (exwm-randr-enable))
 #+end_src
@@ -383,22 +383,28 @@ We need to configure ~randr~ for multiple monitor support.
 ~polybar~ needs some configuration to show the current exwm workspace correctly.
 #+begin_src emacs-lisp
 (unless (string-match "-[Mm]icrosoft" operating-system-release)
-  (defvar db/polybar-process nil
-    "Holds the process of the running Polybar instance, if any")
+  (defvar db/polybar-left-process nil
+    "Holds the process of the running Polybar (left) instance, if any")
+
+  (defvar db/polybar-right-process nil
+    "Holds the process of the running Polybar (right) instance, if any")
 
   (defun db/kill-panel ()
     "Kill the polybar panel"
     (interactive)
-    (when db/polybar-process
+    (when (or db/polybar-left-process db/polybar-right-process)
       (ignore-errors
-        (kill-process db/polybar-process)))
-    (setq db/polybar-process nil))
+        (kill-process db/polybar-left-process)
+        (kill-process db/polybar-right-process)))
+    (setq db/polybar-left-process nil)
+    (setq db/polybar-right-process nil))
 
   (defun db/start-panel (&optional theme)
     "Start the polybar panel"
     (interactive)
     (db/kill-panel)
-    (setq db/polybar-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-single.ini single")))
+    (setq db/polybar-left-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-left.ini left"))
+    (setq db/polybar-right-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-right.ini right")))
 
   (setq WORKSPACE_1 ""
         WORKSPACE_2 ""
@@ -459,6 +465,13 @@ General settings for ~lsp-mode~
         lsp-file-watch-threshold 10000))
 #+end_src
 
+Key bindings for lsp mode
+
+#+begin_src emacs-lisp
+(eval-after-load 'lsp-mode
+                    '(define-key lsp-mode-map (kbd "<M-return>") 'lsp-execute-code-action))
+#+end_src
+
 ** ~lsp-ui~
 #+begin_src emacs-lisp
 (after! lsp-ui
@@ -491,107 +504,108 @@ Get the docker path for a given real path (currently not needed)
 
 Initialize ~lsp-docker~
 #+begin_src emacs-lisp
-(use-package! lsp-docker
-  :config
-  (setq lsp-docker-container-name "lsp-langserver"
-        lsp-docker-image-name lsp-docker-container-name
-        lsp-docker-path-mappings
-        '(("/bin" . "/usr/local/bin/host")          ; We need this to provide acces to hosts apps for sh linters.
-          ("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
-          ("/home/demis/.local/share/git/dbase-livemonitor" . "/projects/dbase-livemonitor")
-          ("/home/demis/.local/share/git/lsp-main-dev" . "/projects/lsp-main-dev")))
+;; (use-package! lsp-docker
+;;   :config
+;;   (setq lsp-docker-container-name "lsp-langserver"
+;;         lsp-docker-image-name lsp-docker-container-name
+;;         lsp-docker-path-mappings
+;;         '(("/bin" . "/usr/local/bin/host")          ; We need this to provide acces to hosts apps for sh linters.
+;;           ("/home/demis/.local/share/git/dotArch" . "/projects/dotArch")
+;;           ("/home/demis/.local/share/git/dbase-livemonitor" . "/projects/dbase-livemonitor")
+;;           ("/home/demis/.local/share/git/OnyxAudiobookPlayer" . "/projects/OnyxAudiobookPlayer")
+;;           ("/home/demis/.local/share/git/lsp-main-dev" . "/projects/lsp-main-dev")))
 
-  (lsp-docker-init-clients
-   :docker-image-id lsp-docker-image-name
-   :docker-container-name lsp-docker-container-name
-   :client-packages '(lsp-bash lsp-dockerfile lsp-php)
-   :client-configs (list
-                    (list :server-id 'bash-ls :docker-server-id 'bashls-docker :server-command "bash-language-server start")
-                    (list :server-id 'iph :docker-server-id 'phpls-docker :server-command "intelephense --stdio")
-                    (list :server-id 'dockerfile-ls :docker-server-id 'dockerfilels-docker :server-command "docker-langserver --stdio"))
-   :path-mappings lsp-docker-path-mappings))
+;;   (lsp-docker-init-clients
+;;    :docker-image-id lsp-docker-image-name
+;;    :docker-container-name lsp-docker-container-name
+;;    :client-packages '(lsp-bash lsp-dockerfile lsp-php)
+;;    :client-configs (list
+;;                     (list :server-id 'bash-ls :docker-server-id 'bashls-docker :server-command "bash-language-server start")
+;;                     (list :server-id 'iph :docker-server-id 'phpls-docker :server-command "intelephense --stdio")
+;;                     (list :server-id 'dockerfile-ls :docker-server-id 'dockerfilels-docker :server-command "docker-langserver --stdio"))
+;;    :path-mappings lsp-docker-path-mappings))
 #+end_src
 
 After ~lsp-docker~, lets configure some new flycheck checkers and enable them.
 #+begin_src emacs-lisp
-(after! lsp-docker
-  ;;; bash, sh
-  (flycheck-define-checker sh-shellcheck-docker
-    "Use shellcheck inside a docker container"
-    :command ("docker" "exec" "-i"
-              (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
-              "shellcheck"
-              "--format" "checkstyle"
-              "--shell" (eval (symbol-name sh-shell))
-              (option-flag "--external-sources"
-                           flycheck-shellcheck-follow-sources)
-              (option "--exclude" flycheck-shellcheck-excluded-warnings list
-                      flycheck-option-comma-separated-list)
-              "-")
-    :standard-input t
-    :modes sh-mode
-    :error-parser flycheck-parse-checkstyle
-    :error-filter (lambda (errors)
-                    (flycheck-remove-error-file-names "-" errors))
-    :predicate (lambda () (memq sh-shell '(bash ksh88 sh)))
-    :verify
-    (lambda (_)
-      (let ((supported (memq sh-shell '(bash ksh88 sh))))
-        (list (flycheck-verification-result-new
-               :label (format "Shell %s supported" sh-shell)
-               :message (if supported "yes" "no")
-               :face (if supported 'success '(bold warning))))))
-    :error-explainer
-    (lambda (err)
-      (let ((error-code (flycheck-error-id err))
-            (url "https://github.com/koalaman/shellcheck/wiki/%S"))
-        (and error-code `(url . ,(format url error-code))))))
+;; (after! lsp-docker
+;;   ;;; bash, sh
+;;   (flycheck-define-checker sh-shellcheck-docker
+;;     "Use shellcheck inside a docker container"
+;;     :command ("docker" "exec" "-i"
+;;               (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+;;               "shellcheck"
+;;               "--format" "checkstyle"
+;;               "--shell" (eval (symbol-name sh-shell))
+;;               (option-flag "--external-sources"
+;;                            flycheck-shellcheck-follow-sources)
+;;               (option "--exclude" flycheck-shellcheck-excluded-warnings list
+;;                       flycheck-option-comma-separated-list)
+;;               "-")
+;;     :standard-input t
+;;     :modes sh-mode
+;;     :error-parser flycheck-parse-checkstyle
+;;     :error-filter (lambda (errors)
+;;                     (flycheck-remove-error-file-names "-" errors))
+;;     :predicate (lambda () (memq sh-shell '(bash ksh88 sh)))
+;;     :verify
+;;     (lambda (_)
+;;       (let ((supported (memq sh-shell '(bash ksh88 sh))))
+;;         (list (flycheck-verification-result-new
+;;                :label (format "Shell %s supported" sh-shell)
+;;                :message (if supported "yes" "no")
+;;                :face (if supported 'success '(bold warning))))))
+;;     :error-explainer
+;;     (lambda (err)
+;;       (let ((error-code (flycheck-error-id err))
+;;             (url "https://github.com/koalaman/shellcheck/wiki/%S"))
+;;         (and error-code `(url . ,(format url error-code))))))
 
-;;; zsh
-  (flycheck-define-checker sh-zsh-docker
-    "sh-zsh with docker support."
-    :command ("docker" "exec" "-i"
-              (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
-              "zshwrapper" (eval (db/get-docker-path lsp-docker-path-mappings (projectile-project-root)))
-              (eval (buffer-file-name)))
-    :error-patterns
-    ((error line-start (file-name) ":" line ": " (message) line-end))
-    :modes sh-mode
-    :predicate (lambda () (eq sh-shell 'zsh))
-    :next-checkers ((warning . sh-shellcheck)))
+;; ;;; zsh
+;;   (flycheck-define-checker sh-zsh-docker
+;;     "sh-zsh with docker support."
+;;     :command ("docker" "exec" "-i"
+;;               (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+;;               "zshwrapper" (eval (db/get-docker-path lsp-docker-path-mappings (projectile-project-root)))
+;;               (eval (buffer-file-name)))
+;;     :error-patterns
+;;     ((error line-start (file-name) ":" line ": " (message) line-end))
+;;     :modes sh-mode
+;;     :predicate (lambda () (eq sh-shell 'zsh))
+;;     :next-checkers ((warning . sh-shellcheck)))
 
-  ;; Disable lsp checker and enable/select above checker for sh-mode
-  (add-hook! sh-mode
-    (add-to-list 'flycheck-checkers 'sh-shellcheck-docker)
-    (add-to-list 'flycheck-checkers 'sh-zsh-docker)
-    (add-to-list 'flycheck-disabled-checkers 'lsp)
-    (setq flycheck-checker 'sh-shellcheck-docker))
+;;   ;; Disable lsp checker and enable/select above checker for sh-mode
+;;   (add-hook! sh-mode
+;;     (add-to-list 'flycheck-checkers 'sh-shellcheck-docker)
+;;     (add-to-list 'flycheck-checkers 'sh-zsh-docker)
+;;     (add-to-list 'flycheck-disabled-checkers 'lsp)
+;;     (setq flycheck-checker 'sh-shellcheck-docker))
 
-  ;; dockerfile
-  (flycheck-define-checker dockerfile-hadolint-docker
-    "A Dockerfile syntax checker using the hadolint.
-See URL `http://github.com/hadolint/hadolint/'."
-    :command ("docker" "exec" "-i"
-              (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
-              "hadolint" "-")
-    :standard-input t
-    :error-patterns
-    ((error line-start
-            (file-name) ":" line ":" column " " (message)
-            line-end)
-     (warning line-start
-              (file-name) ":" line " " (id (one-or-more alnum)) " " (message)
-              line-end))
-    :error-filter
-    (lambda (errors)
-      (flycheck-sanitize-errors
-       (flycheck-remove-error-file-names "/dev/stdin" errors)))
-    :modes dockerfile-mode)
+;;   ;; dockerfile
+;;   (flycheck-define-checker dockerfile-hadolint-docker
+;;     "A Dockerfile syntax checker using the hadolint.
+;; See URL `http://github.com/hadolint/hadolint/'."
+;;     :command ("docker" "exec" "-i"
+;;               (eval (concat lsp-docker-container-name "-" (number-to-string lsp-docker-container-name-suffix)))
+;;               "hadolint" "-")
+;;     :standard-input t
+;;     :error-patterns
+;;     ((error line-start
+;;             (file-name) ":" line ":" column " " (message)
+;;             line-end)
+;;      (warning line-start
+;;               (file-name) ":" line " " (id (one-or-more alnum)) " " (message)
+;;               line-end))
+;;     :error-filter
+;;     (lambda (errors)
+;;       (flycheck-sanitize-errors
+;;        (flycheck-remove-error-file-names "/dev/stdin" errors)))
+;;     :modes dockerfile-mode)
 
-  (add-hook! dockerfile-mode
-    (add-to-list 'flycheck-checkers 'sh-hadolint-docker)
-    (add-to-list 'flycheck-disabled-checkers 'lsp)
-    (setq flycheck-checker 'sh-hadolint-docker)))
+;;   (add-hook! dockerfile-mode
+;;     (add-to-list 'flycheck-checkers 'sh-hadolint-docker)
+;;     (add-to-list 'flycheck-disabled-checkers 'lsp)
+;;     (setq flycheck-checker 'sh-hadolint-docker)))
 #+end_src
 
 ** ~lsp-treemacs~
@@ -635,11 +649,27 @@ Configure the styling for on the fly error reporting with ~flycheck~
 #+begin_src emacs-lisp
 (after! flycheck
   (custom-set-faces!
-    `(flycheck-error :underline nil :box (:line-width 1 :color ,THEME_RED :style nil))
-    `(flycheck-warning :underline nil :box (:line-width 1 :color ,THEME_YELLOW :style nil))
-    `(flycheck-info :underline nil :box (:line-width 1 :color ,THEME_GREEN :style nil))))
+    `(flycheck-error :underline ,THEME_RED :background ,THEME_BG)
+    `(flycheck-warning :underline ,THEME_ORANGE :background ,THEME_BG)
+    `(flycheck-info :underline ,THEME_YELLOW :background ,THEME_BG)))
 #+end_src
 
+** Language specific
+*** ~eslint~
+ Install eslint
+- Clone https://github.com/microsoft/vscode-eslint
+- run ~npm install~
+- run ~npm run compile~
+- run ~npm install -g eslint~
+- set this
+#+begin_src emacs-lisp
+(setq lsp-eslint-server-command
+      '("node"
+        "/home/demis/.local/share/git/vscode-eslint/server/out/eslintServer.js"
+        "--stdio"))
+#+end_src
+
+See also: https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
 * DOOM
 When using ~SPC-b-B~, I want to see all buffers, not only workspace buffers.
 #+begin_src emacs-lisp
