@@ -1,0 +1,8 @@
+#+TITLE: Config
+
+#+BEGIN_SRC emacs-lisp
+(load-theme 'wombat)
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 120)
+#+END_SRC
+
+

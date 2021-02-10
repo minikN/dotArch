@@ -20,3 +20,6 @@ zsh/.zcompdump
 
 !X11/
 !X11/**
+
+!quake/
+!quake/**
