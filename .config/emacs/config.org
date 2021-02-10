@@ -1,8 +1,420 @@
-#+TITLE: Config
+#+TITLE:    Config
+#+AUTHOR:   Demis Balbach
+#+EMAIL:    db@minikn.xyz
 
 #+BEGIN_SRC emacs-lisp
-(load-theme 'wombat)
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 120)
+;;; config.el --- User configuration -*- lexical-binding: t; -*-
 #+END_SRC
 
+* Core Packages
+*** selectrum
+   =selectrum= provides an interface for selecting items from a list.
+   You can use it to run a command with =M-x=. You can use it to
+   open a file with =C-x C-f= (find-file). Even TRAMP works
+   great out of the box. You can switch buffers with =C-x b=
+   And every other command in Emacs is automatically enhanced
+   without the need for any configuration.
+
+   Further information: https://github.com/raxod502/selectrum
+   #+BEGIN_SRC emacs-lisp
+    (use-package selectrum
+      :config
+      (selectrum-mode +1)
+      (setq completion-styles '(substring partial-completion)))
+   #+END_SRC
+
+*** prescient
+   =prescient= is a library which sorts and filters lists of
+   candidates, such as appear when you use a package like
+   ivy or Company. As compared to other packages which
+   accomplish similar tasks, including IDO, Ivy, Helm, Smex,
+   Flx, Historian, and Company-Statistics, prescient.el aims
+   to be simpler, more predictable, and faster.
+
+   Further information: https://github.com/raxod502/prescient.el
+   #+BEGIN_SRC emacs-lisp
+    (use-package prescient)
+   #+END_SRC
+
+*** selectrum-prescient
+   =selectrum-prescient= provides special commands to adjust
+   how =prescient= filters candidates in the current Selectrum
+   buffer.
+
+   For example, to toggle regexp filtering on or off
+   (perhaps you're searching for a long/complex candidate),
+   you can press =M-s r=. If you wish to use only regexp filtering,
+   you can use =C-u M-s r= to unconditionally turn on regexp
+   filtering and turn off all other methods. This toggling is a
+   buffer-local effect, and does not change the default filter
+   behavior. For that, customize =prescient-filter-method=.
+
+   These commands are similar in usage to Isearch's own
+   toggling commands, except that multiple filtering methods
+   can be active at the same time. While =selectrum-prescient-mode=
+   is enabled, =M-s= is bound to =selectrum-prescient-toggle-map=
+   in the Selectrum buffer, and is used as a prefix key to
+   access the commands.
+   
+   | Key   | Command                               |
+   |-------+---------------------------------------|
+   | M-s a | selectrum-prescient-toggle-anchored   |
+   | M-s f | selectrum-prescient-toggle-fuzzy      |
+   | M-s i | selectrum-prescient-toggle-initialism |
+   | M-s l | selectrum-prescient-toggle-literal    |
+   | M-s p | selectrum-prescient-toggle-prefix     |
+   | M-s r | selectrum-prescient-toggle-regexp     |
+
+   #+BEGIN_SRC emacs-lisp
+    (use-package selectrum-prescient
+      :after (selectrum prescient)
+      :config
+      (selectrum-prescient-mode +1))
+   #+END_SRC
+   
+* User Interface
+** Basics
+   Let's clean up Emacs' user interface. It's pretty cluttered
+   by default. Let's make it more minimal and give some
+   breathing room.
+   #+BEGIN_SRC emacs-lisp
+     (setq inhibit-startup-message t)                ;; Disable the welcome screen.
+     (scroll-bar-mode -1)                            ;; Disable the visibility of scroll bars.
+     (tool-bar-mode -1)                              ;; We don't need a toolbar, do we?
+     (menu-bar-mode -1)                              ;; Or a menu bar.
+     (tooltip-mode -1)                               ;; Line above, but /bar/tip/.
+     (fringe-mode '(15 . 0))                         ;; We want a bit of fringe on the left,
+   #+END_SRC
+
+** Font
+   #+BEGIN_SRC emacs-lisp
+     (load-theme 'wombat)
+     (set-face-attribute 'default nil :font "Fira Code Retina" :height 120)
+   #+END_SRC
+
+** Modeline
+   #+begin_src emacs-lisp
+     (defvar +modeline--old-bar-height nil)
+     ;;;###autoload
+     (defun +modeline-resize-for-font-h ()
+       "Adjust the modeline's height when the font size is changed by
+     `doom/increase-font-size' or `doom/decrease-font-size'.
+     Meant for `doom-change-font-size-hook'."
+       (unless +modeline--old-bar-height
+	 (setq +modeline--old-bar-height doom-modeline-height))
+       (let ((default-height +modeline--old-bar-height)
+	     (scale (or (frame-parameter nil 'font-scale) 0)))
+	 (setq doom-modeline-height
+	       (if (> scale 0)
+		   (+ default-height (* scale doom-font-increment))
+		 default-height))))
+
+     ;;;###autoload
+     (defun +modeline-update-env-in-all-windows-h (&rest _)
+       "Update version strings in all buffers."
+       (dolist (window (window-list))
+	 (with-selected-window window
+	   (when (fboundp 'doom-modeline-update-env)
+	     (doom-modeline-update-env))
+	   (force-mode-line-update))))
+
+     ;;;###autoload
+     (defun +modeline-clear-env-in-all-windows-h (&rest _)
+       "Blank out version strings in all buffers."
+       (unless (featurep! +light)
+	 (dolist (buffer (buffer-list))
+	   (with-current-buffer buffer
+	     (setq doom-modeline-env--version
+		   (bound-and-true-p doom-modeline-load-string)))))
+       (force-mode-line-update t))
+
+     (use-package doom-modeline
+       :hook (after-init . doom-modeline-mode)
+       :hook (doom-modeline-mode . size-indication-mode) ; filesize in modeline
+       :hook (doom-modeline-mode . column-number-mode)   ; cursor column in modeline
+       :custom ((doom-modeline-height 15))
+       :init
+       (unless after-init-time
+	 ;; prevent flash of unstyled modeline at startup
+	 (setq-default mode-line-format nil))
+       ;; We display project info in the modeline ourselves
+       (setq projectile-dynamic-mode-line nil)
+       ;; Set these early so they don't trigger variable watchers
+       (setq doom-modeline-bar-width 3
+	     doom-modeline-github nil
+	     doom-modeline-mu4e nil
+	     doom-modeline-persp-name nil
+	     doom-modeline-minor-modes nil
+	     doom-modeline-buffer-file-name-style 'relative-from-project)
+
+       :config
+       (defadvice! +modeline-disable-icon-in-daemon-a (orig-fn &rest args)
+	 :around #'doom-modeline-propertize-icon
+	 (when (display-graphic-p)
+	   (apply orig-fn args)))
+
+       (add-hook 'after-setting-font-hook #'+modeline-resize-for-font-h)
+       (add-hook 'doom-load-theme-hook #'doom-modeline-refresh-bars)
+       (add-hook '+doom-dashboard-mode-hook #'doom-modeline-set-project-modeline)
+
+       (add-hook! 'magit-mode-hook
+	 (defun +modeline-hide-in-non-status-buffer-h ()
+	   "Show minimal modeline in magit-status buffer, no modeline elsewhere."
+	   (if (eq major-mode 'magit-status-mode)
+	       (doom-modeline-set-vcs-modeline)
+	     (hide-mode-line-mode))))
+
+       ;; Some functions modify the buffer, causing the modeline to show a false
+       ;; modified state, so force them to behave.
+       (defadvice! +modeline--inhibit-modification-hooks-a (orig-fn &rest args)
+	 :around #'ws-butler-after-save
+	 (with-silent-modifications (apply orig-fn args)))
+
+       ;; ;;; Extensions
+       (use-package anzu)
+       (use-package evil-anzu
+	 :after (evil anzu)
+	 :config (global-anzu-mode +1)))
+   #+end_src
+
+** Theme
+   #+begin_src emacs-lisp 
+     (use-package doom-themes
+       :straight (emacs-doom-themes :type git
+				    :host github
+				    :repo "minikN/emacs-doom-themes"
+				    :files ("*.el" "themes/*.el"))
+       :defer t
+       :init
+       (setq doom-theme 'doom-monokai-spectrum
+	     doom-themes-enable-bold nil
+	     doom-themes-enable-italic t
+	     doom-themes-treemacs-enable-variable-pitch nil
+	     doom-themes-treemacs-theme "doom-colors-extended"
+	     lsp-treemacs-theme "doom-colors-extended")   
+       (add-hook 'doom-load-theme-hook #'doom-themes-org-config)
+       (add-hook 'doom-load-theme-hook #'doom-themes-treemacs-config))
+
+
+     ;; (use-package solaire-mode
+     ;;   :when (or (daemonp) (display-graphic-p))
+     ;;   :hook (doom-load-theme . solaire-global-mode)
+     ;;   :config
+     ;;   (when (daemonp)
+     ;;     (add-hook! '(doom-switch-frame-hook after-make-frame-functions)
+     ;;       (defun +doom-disable-solaire-mode-maybe-h (&optional frame)
+     ;; 	(if (display-graphic-p frame)
+     ;; 	    (unless solaire-global-mode
+     ;; 	      (solaire-global-mode +1))
+     ;; 	  (when solaire-global-mode
+     ;; 	    (solaire-global-mode -1)))))))
+   #+end_src
+
+** Rainbow delimiters
+   #+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+   #+end_src
+
+* System
+** EXWM
+   Setting up ~exwm~ as a window manager.
+   #+begin_src emacs-lisp
+     (unless (string-match "-[Mm]icrosoft" operating-system-release)
+       (server-start)
+
+       (defun db/run-in-background (command)
+	 "Start an application in the background."
+	 (let ((command-parts (split-string command "[ ]+")))
+	   (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+
+       (use-package exwm
+	 :config
+	 ;; Set the initial number of workspaces (they can also be created later).
+	 (setq exwm-workspace-number 10)
+
+	 ;; Per application settings
+	 (setq exwm-manage-configurations
+	       '(((equal exwm-class-name "Blueman-manager")
+		  floating t
+		  floating-mode-line nil
+		  width 0.5
+		  height 0.5)
+
+		 ((equal exwm-class-name "Pavucontrol")
+		  floating t
+		  floating-mode-line nil
+		  width 0.5
+		  height 0.5)
+
+		 ((equal exwm-class-name "qutebrowser")
+		  workspace 0
+		  char-mode t)
+
+		 ((equal exwm-class-name "Steam") workspace 6)
+		 ((equal exwm-class-name "discord") workspace 5)))
+
+	 ;; When EXWM starts up, do some extra confifuration
+	 (add-hook 'exwm-init-hook
+		   (lambda ()
+		     ;; Start polybar
+		     ;(db/start-panel)
+
+		     ;; Launch apps that will run in the background
+		     ;(db/run-in-background "pasystray")
+		     ;(db/run-in-background "blueman-applet")))
+		     ))
+	 ;; Use class names for all windows except Java and GIMP
+	 (add-hook 'exwm-update-class-hook
+		   (lambda ()
+		     (unless (or (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+				 (string= "gimp" exwm-instance-name))
+		       (exwm-workspace-rename-buffer exwm-class-name))))
+	 (add-hook 'exwm-update-title-hook
+		   (lambda ()
+		     (when (or (not exwm-instance-name)
+			       (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+			       (string= "gimp" exwm-instance-name))
+		       (exwm-workspace-rename-buffer exwm-title))))
+
+	 ;; Disable the default key map
+	 (define-key exwm-mode-map (kbd "C-c") nil)
+
+	 ;; Global key bindings
+	 (setq exwm-input-global-keys
+	       `(
+		 ;; Bind "s-0 -> s-9" to workspaces.
+		 ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch 0)))
+		 ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch 1)))
+		 ([?\s-3] . (lambda () (interactive) (exwm-workspace-switch 2)))
+		 ([?\s-4] . (lambda () (interactive) (exwm-workspace-switch 3)))
+		 ([?\s-5] . (lambda () (interactive) (exwm-workspace-switch 4)))
+		 ([?\s-6] . (lambda () (interactive) (exwm-workspace-switch 5)))
+		 ([?\s-7] . (lambda () (interactive) (exwm-workspace-switch 6)))
+		 ([?\s-8] . (lambda () (interactive) (exwm-workspace-switch 7)))
+		 ([?\s-9] . (lambda () (interactive) (exwm-workspace-switch 8)))
+		 ([?\s-0] . (lambda () (interactive) (exwm-workspace-switch 9)))
+
+		 ;; NOT NEEDED IN MASTER/STACK LAYOUT
+		 ;; Move focus between windows (vim and arrow keys)
+		 ;; ([s-left] . windmove-left)
+		 ;; ([?\s-h]  . windmove-left)
+		 ;; ([s-right] . windmove-right)
+		 ;; ([?\s-l]   . windmove-right)
+		 ;; ([s-up] . windmove-up)
+		 ;; ([?\s-k] . windmove-up)
+		 ;; ([s-down] . windmove-down)
+		 ;; ([?\s-j] . windmove-down)
+
+		 ;; ;; Move windows
+		 ;; ([M-s-left] . windmove-swap-states-left)
+		 ;; ([M-s-right] . windmove-swap-states-right)
+		 ;; ([M-s-up] . windmove-swap-states-up)
+		 ;; ([M-s-down] . windmove-swap-states-down)
+
+		 ([?\s-&] . (lambda (command)
+			      (interactive (list (read-shell-command "$ ")))
+			      (start-process-shell-command command nil command)))
+
+		 ;; Master/Stack layout
+	       ;;; Arrange the windows if needed
+		 ([?\s-a] . edwina-arrange)
+
+	       ;;; Create a new window
+		 ([?\s-w] . edwina-clone-window)
+
+	       ;;; delete the current window
+		 ([?\s-d] . edwina-delete-window)
+
+	       ;;; Move down the hierarchy
+		 ([?\s-e] . edwina-select-next-window) ;; move focus
+		 ([?\s-E] . edwina-swap-next-window) ;; move window
+
+	       ;;; Move down the hierarchy
+		 ([?\s-q] . edwina-select-previous-window) ;; move focus
+		 ([?\s-Q] . edwina-swap-previous-window) ;; move window
+
+	       ;;; Swap current window with master
+		 ([?\s-s] . edwina-zoom)
+
+		 ;; Launch applications
+		 ([?\s- ] . counsel-linux-app)
+
+		 ;; Launch terminal
+		 ([s-return] . +vterm/here)
+
+		 ;; Enter passwords
+		 ([?\s-p] . ivy-pass)
+
+		 ;; char/line-mode stuff
+		 ([?\s-i] . exwm-input-release-keyboard)
+
+	       ;;; Enter line mode and redirect input to emacs
+		 ([?\s-n] . (lambda () (interactive)
+			      (exwm-reset)
+			      (setq exwm-input-line-mode-passthrough t)))
+
+	       ;;; Only enter line mode
+		 ([?\s-N] . (lambda () (interactive)
+			      (exwm-reset)
+			      (setq exwm-input-line-mode-passthrough nil)))
+
+	       ;;; Kill a window
+		 ([?\s-D] . (lambda () (interactive)
+			      (kill-buffer (current-buffer))))
+
+		 ;; full-screen / floating
+		 ([?\s-f] . exwm-layout-toggle-fullscreen)
+		 ([?\s-F] . exwm-floating-toggle-floating)
+
+		 ;; mode-line / move window
+		 ([?\s-m] . exwm-layout-toggle-mode-line)
+		 ([?\s-M] . exwm-workspace-move-window)
+
+		 ;; Media keys
+		 ([XF86PowerOff] . db/power-menu)
+		 ([XF86Sleep]    . db/power-menu)
+		 ))
+
+	 ;; Set s-c and s-v to C-s and C-v in X application
+	 (setq exwm-input-simulation-keys
+	       '(([?\s-c] . [C-c])
+		 ([\?s-v] . [C-v])))
+
+	 ;; Enable EXWM
+	 (exwm-enable)))
+   #+end_src
+
+** randr
+   We need to configure ~randr~ for multiple monitor support.
+   #+begin_src emacs-lisp
+     (unless (string-match "-[Mm]icrosoft" operating-system-release)
+       (require 'exwm-randr)
+
+       (setq exwm-randr-workspace-monitor-plist
+	     '(0 "DP-0"
+		 1 "DP-0"
+		 2 "HDMI-0"
+		 3 "HDMI-0"
+		 4 "HDMI-0"
+		 5 "DP-0"
+		 6 "DP-0"
+		 7 "HDMI-0"))
+
+       (add-hook 'exwm-randr-screen-change-hook
+		 (lambda ()
+		   (start-process-shell-command
+		    "xrandr" nil "xrandr --output DP-0 --left-of HDMI-0 --auto")))
+
+       (exwm-randr-enable))
+   #+end_src
+
+** Pinentry
+   I use =pinentry= to enter my gpg passphrase through emacs. This only works
+   in conjunction with my config located at =~/.local/share/gnupg=.
+   #+begin_src emacs-lisp
+     (use-package pinentry
+     :config
+     (pinentry-start))
+   #+end_src
 
