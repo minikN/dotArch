@@ -403,8 +403,8 @@ We need to configure ~randr~ for multiple monitor support.
     "Start the polybar panel"
     (interactive)
     (db/kill-panel)
-    (setq db/polybar-left-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-left.ini left"))
-    (setq db/polybar-right-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/demis/.config/polybar/bar-right.ini right")))
+    (setq db/polybar-left-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/db/.config/polybar/bar-left.ini left"))
+    (setq db/polybar-right-process (start-process-shell-command "polybar" "*polybar*" "polybar -c=/home/db/.config/polybar/bar-right.ini right")))
 
   (setq WORKSPACE_1 ""
         WORKSPACE_2 ""
