@@ -55,14 +55,13 @@
   (:host github
    :repo "minikN/emacs-doom-themes"
    :files ("*.el" "themes/*.el")))
-(package! solaire-mode)
 
 ;; Loading packages for linux only
 (unless (string-match "-[Mm]icrosoft" operating-system-release)
     (progn (package! exwm)
-           (package! edwina)
-           (package! imgur
-             :recipe (:host github :repo "minikN/imgur.el"))))
+           (package! edwina)))
+           ;; (package! imgur
+           ;;   :recipe (:host github :repo "minikN/imgur.el"))))
 
 ;; load common packages
 (package! pinentry)
