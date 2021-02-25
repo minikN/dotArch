@@ -452,11 +452,6 @@ Set up window manager with ~edwina~ for a master/stack layout.
   (edwina-mode 1))
 #+end_src
 
-Binding ~PRINT_SCREEN~ to execute ~imgur.el~.
-#+begin_src emacs-lisp
-(unless (string-match "-[Mm]icrosoft" operating-system-release)
-  (global-set-key [print] (lambda () (interactive) (imgur-init-screenshot))))
-#+end_src
 * IDE
 General settings for ~lsp-mode~
 #+begin_src emacs-lisp
