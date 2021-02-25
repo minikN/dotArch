@@ -33,39 +33,39 @@ they are implemented.
 Let's set the default browser when clicking on links.
 #+begin_src emacs-lisp
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "qutebrowser")
+      browse-url-generic-program "chromium")
+#+end_src
+
+** Keybindings
+Change leader key
+#+begin_src emacs-lisp
+(setq doom-leader-key "M-SPC"
+      doom-localleader-key "M-SPC m")
+#+end_src
+
+Global Keybindings
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Find file" doom-leader-key #'+ivy/projectile-find-file)
 #+end_src
 
 * User Interface
-Setting the font globally.
-Doom exposes five (optional) variables for controlling fonts in Doom. Here
-are the three important ones:
-
-- ~doom-font~
-- ~doom-variable-pitch-font~
-- ~doom-big-font~ -- used for ~doom-big-font-mode~; use this for presentations or streaming.
-
-They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-font string.
-#+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Cascadia Mono" :size 14))
-#+end_src
-
-This determines the style of line numbers in effect. If set to `nil`, line
-numbers are disabled. For relative line numbers, set this to `relative`.
+Display proper line numbers
 #+begin_src emacs-lisp
 (setq display-line-numbers-type t)
 #+end_src
 
-This specifies global line spacing. 0 refers to no line spacing.
-0.1 refers to 10% line spacing.
+Set the correct line spacing
 #+begin_src emacs-lisp
 (setq line-spacing 0.2)
 #+end_src
 
-The ~all-the-icons~ package is included in DOOM.
-However, it's missing some important (for me, at least) icons.
-Let's set them up manually. This is list is prone to changes.
+Set the font
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Fira Code Retina" :size 20))
+#+end_src
+
+Load some additional icons for =all-the-icons=
 #+begin_src emacs-lisp
 (after! all-the-icons
   (add-to-list 'all-the-icons-icon-alist '("^*.conf$" all-the-icons-fileicon "config" :face all-the-icons-yellow))
@@ -186,6 +186,9 @@ Setting up ~exwm~ as a window manager.
     ;; Set the initial number of workspaces (they can also be created later).
     (setq exwm-workspace-number 10)
 
+    (add-hook! 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
+    (add-hook! 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
+
     ;; Per application settings
     (setq exwm-manage-configurations
           '(((equal exwm-class-name "Blueman-manager")
@@ -200,12 +203,19 @@ Setting up ~exwm~ as a window manager.
              width 0.5
              height 0.5)
 
+            ((equal exwm-class-name "Android Studio Setup Wizard")
+             floating t
+             floating-mode-line nil
+             width 0.5
+             char-mode t)
+
             ((equal exwm-class-name "qutebrowser")
              workspace 0
              char-mode t)
 
             ((equal exwm-class-name "Steam") workspace 6)
-            ((equal exwm-class-name "discord") workspace 5)))
+            ((equal exwm-class-name "discord") workspace 5)
+            (t char-mode t)))
 
     ;; When EXWM starts up, do some extra confifuration
     (add-hook 'exwm-init-hook
@@ -639,13 +649,106 @@ Configure the styling for on the fly error reporting with ~flycheck~
 - run ~npm install -g eslint~
 - set this
 #+begin_src emacs-lisp
-(setq lsp-eslint-server-command
-      '("node"
-        "/home/demis/.local/share/git/vscode-eslint/server/out/eslintServer.js"
-        "--stdio"))
+;; (setq lsp-eslint-server-command
+;;       '("node"
+;;         "/home/db/.local/share/git/vscode-eslint/server/out/eslintServer.js"
+;;         ;(concat lsp-eslint-unzipped-path "/extension/server/out/eslintServer.js")
+;;         "--stdio"))
+#+end_src
+See also: https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
+
+*** Frontend Web development
+This includes configuration for frontend web development. Namely =npm=, =typescript=, =javascript=.
+
+Map =M-C-P= to =lsp-eslint-fix-all= in all typescript buffers.
+#+begin_src emacs-lisp
+(map! :map (typescript-mode-map typescript-tsx-mode-map)
+      :desc "Apply fixes"               "M-C-P" #'lsp-eslint-fix-all)
 #+end_src
 
-See also: https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
+Map all the localleader key bindings for js and ts buffers.
+#+begin_src emacs-lisp
+(map! :localleader
+      ;; NPM
+      (:after npm-mode :map npm-mode-keymap "n" nil)
+      (:map (js2-mode-map typescript-mode-map typescript-tsx-mode-map json-mode-map)
+       :prefix ("n" . "npm")
+       :desc "Install (--save)"         "s"     #'npm-mode-npm-install-save
+       :desc "Install package"          "i"     #'npm-mode-npm-install
+       :desc "Run task"                 "r"     #'npm-mode-npm-run
+       :desc "Initialize project"       "I"     #'npm-mode-npm-init
+       :desc "List packages"            "l"     #'npm-mode-npm-list
+       :desc "Uninstall package"        "u"     #'npm-mode-npm-uninstall
+       :desc "Remove node_modules"      "c"     #'npm-mode-npm-clean
+       :desc "Visit package.json"       "p"     #'npm-mode-visit-project-file
+       :desc "Install (--save-dev)"     "d"     #'npm-mode-npm-install-save-dev)
+
+      ;; web-mode
+      (:after web-mode :map (web-mode-map rjsx-mode-map)
+       "i" nil
+       "h" nil
+       "a" nil
+       "t" nil
+       "b" nil
+       "d" nil
+       "e" nil)
+      (:map (web-mode-map typescript-tsx-mode-map rjsx-mode-map)
+       :prefix ("a" . "Attribute")
+       :desc "Next"                     "n"     #'web-mode-attribute-next
+       :desc "Previous"                 "p"     #'web-mode-attribute-previous
+       :desc "Select"                   "s"     #'web-mode-attribute-select
+       :desc "Beginning"                "b"     #'web-mode-attribute-beginning
+       :desc "End"                      "e"     #'web-mode-attribute-end
+       :desc "Delete"                   "d"     #'web-mode-attribute-kill
+       :desc "Insert"                   "i"     #'web-mode-attribute-insert
+       :prefix ("t" . "Tag")
+       :desc "Next"                     "n"     #'web-mode-tag-next
+       :desc "Previous"                 "p"     #'web-mode-tag-previous
+       :desc "Select"                   "s"     #'web-mode-tag-select
+       :desc "Beginning"                "b"     #'web-mode-tag-beginning
+       :desc "End"                      "e"     #'web-mode-tag-end
+       :desc "Sort attributes"          "a"     #'web-mode-tag-attributes-sort
+       :desc "Match tags"               "m"     #'web-mode-tag-match
+       :prefix ("b" . "Block")
+       :desc "Next"                     "n"     #'web-mode-block-next
+       :desc "Previous"                 "p"     #'web-mode-block-previous
+       :desc "Select"                   "s"     #'web-mode-block-select
+       :desc "Beginning"                "b"     #'web-mode-block-beginning
+       :desc "End"                      "e"     #'web-mode-block-end
+       :desc "Delete"                   "d"     #'web-mode-block-kill
+       :desc "Close"                    "c"     #'web-mode-block-close
+       :prefix ("d" . "DOM")
+       :desc "Show Errors"              "d"     #'web-mode-dom-errors-show
+       :desc "Replace Apostrophes"      "a"     #'web-mode-dom-apostrophes-replace
+       :desc "Encode Entities"          "e"     #'web-mode-dom-entities-encode
+       :desc "Normalize"                "n"     #'web-mode-dom-normalize
+       :desc "Replace Quotes"           "q"     #'web-mode-dom-quotes-replace
+       :desc "Traverse"                 "t"     #'web-mode-dom-traverse
+       :desc "XPath"                    "x"     #'web-mode-dom-xpath
+       :prefix ("e" . "Element")
+       :desc "Close"                    "/"     #'web-mode-element-close
+       :desc "Select Content"           "a"     #'web-mode-element-content-select
+       :desc "Beginning"                "b"     #'web-mode-element-beginning
+       :desc "Clone"                    "c"     #'web-mode-element-clone
+       :desc "Go to child"              "k"     #'web-mode-element-child
+       :desc "End"                      "e"     #'web-mode-element-end
+       :desc "Fold/Unfold children"     "f"     #'web-mode-element-children-fold-or-unfold
+       :desc "Insert"                   "i"     #'web-mode-element-insert
+       :desc "Delete"                   "d"     #'web-mode-element-kill
+       :desc "Mute Blanks"              "m"     #'web-mode-element-mute-blanks
+       :desc "Next"                     "n"     #'web-mode-element-next
+       :desc "Previous"                 "p"     #'web-mode-element-previous
+       :desc "Rename"                   "r"     #'web-mode-element-rename
+       :desc "Select"                   "s"     #'web-mode-element-select
+       :desc "Transpose"                "t"     #'web-mode-element-transpose
+       :desc "Go to parent"             "u"     #'web-mode-element-parent
+       :desc "Vanish"                   "v"     #'web-mode-element-vanish
+       :desc "Wrap"                     "w"     #'web-mode-element-wrap
+                ))
+#+end_src
+
+#+RESULTS:
+
 * DOOM
 When using ~SPC-b-B~, I want to see all buffers, not only workspace buffers.
 #+begin_src emacs-lisp
@@ -783,4 +886,51 @@ Auth is not working for some reason.
 
 ;; ;; Key binding for launching a shell buffer
 ;; (global-set-key (kbd "<s-return>") 'ansi-term)
+#+end_src
+** Screenshot
+Some utility functions to take screenshots and upload them to imgur.
+
+#+begin_src emacs-lisp
+(defun db/screenshot (ext tmp-dir tmp-name)
+  "Interactive menu for screenshots. Requires main, xsel, xclip and curl to be installed."
+  (interactive)
+  (let* ((actions '("Section" "Whole Screen"))
+        (targets '("Imgur" "Clipboard" "Locally"))
+        (tmp-file (concat tmp-dir tmp-name "." ext)))
+
+    (setq action (completing-read "Take screenshot of ..." actions )
+          target (completing-read "Save screenshot ..." targets ))
+    (setq result (db/screenshot-return-cmd action target tmp-file ext))
+    (sit-for 0)
+    (call-process-shell-command (nth 1 result) nil nil nil)
+    (cond ((equal target "Locally")
+           (message (concat "Image saved to: " (nth 0 result))))
+          ((equal target "Imgur")
+           (message "Image uploaded to Imgur. URL saved to the clipboard."))
+          ((equal target "Clipboard")
+           (message "Image saved to the clipboard.")))))
+
+(defun db/screenshot-return-cmd (source target tmp-file ext)
+  "Build the command to be executed for taking screenshots."
+  (let ((cmd ""))
+    (cond ((equal source "Section")
+           (cond ((equal target "Locally")
+                  (print "section local")
+                  (setq tmp-file (concat (read-directory-name "Select directory: " "~/") (read-string "File name (Without extension): ") "." ext))
+                  (setq cmd (concat "maim -u -s " tmp-file)))
+                 ((equal target "Imgur")
+                  (setq cmd (concat "maim -u -s " tmp-file "; imgur " tmp-file " | xclip -selection clipboard")))
+                 ((equal target "Clipboard")
+                  (setq cmd (concat "maim -u -s | xclip -selection clipboard -t image/png")))))
+          ((equal source "Whole Screen")
+           (cond ((equal target "Locally")
+                  (setq tmp-file (concat (read-directory-name "Select directory: " "~/") (read-string "File name (Without extension): ") "." ext))
+                  (setq cmd (concat "maim -u " tmp-file)))
+                 ((equal target "Imgur")
+                  (setq cmd (concat "maim -u " tmp-file "; imgur " tmp-file " | xclip -selection clipboard")))
+                 ((equal target "Clipboard")
+                  (setq cmd (concat "maim -u | xclip -selection clipboard -t image/png"))))))
+    (list tmp-file cmd)))
+
+(global-set-key [print] (lambda () (interactive) (db/screenshot "png" "/tmp/" "screenshot")))
 #+end_src
