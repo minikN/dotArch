@@ -1,8 +1,0 @@
-*
-!.gitignore
-
-!core/
-!core/**
-
-config.org
-init.el
