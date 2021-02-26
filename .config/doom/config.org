@@ -1,16 +1,50 @@
-#+TITLE:    Config
+#+TITLE:    DOOM Emacs Literate Configuration
 #+AUTHOR:   Demis Balbach
 #+EMAIL:    db@minikn.xyz
-
-#+BEGIN_SRC emacs-lisp
-;; -*- lexical-binding: t -*-
-#+END_SRC
+#+LANGUAGE: en
 
 This is the main user configuration for my DOOM Emacs setup.
+
+* Table of Contents
+:PROPERTIES:
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
+- [[#general][General]]
+  - [[#keybindings][Keybindings]]
+- [[#user-interface][User Interface]]
+- [[#system][System]]
+- [[#ide][IDE]]
+  - [[#lsp-ui][lsp-ui]]
+  - [[#lsp-treemacs][lsp-treemacs]]
+  - [[#flycheck][flycheck]]
+  - [[#language-specific][Language specific]]
+    - [[#eslint][eslint]]
+    - [[#frontend-web-development][Frontend Web development]]
+- [[#doom][DOOM]]
+- [[#application-specific-configuration][Application specific configuration]]
+  - [[#counsel][counsel]]
+  - [[#dired][dired]]
+  - [[#magit][magit]]
+  - [[#mu4e][mu4e]]
+  - [[#org-mode][org-mode]]
+    - [[#setup-todo-items][Setup TODO items]]
+    - [[#automatic-toc-on-save][Automatic TOC on save]]
+  - [[#pass][pass]]
+  - [[#pinentry][pinentry]]
+  - [[#projectile][projectile]]
+  - [[#irc][IRC]]
+  - [[#shell][Shell]]
+  - [[#screenshot][Screenshot]]
+:END:
 
 * General
 Place your private configuration here! Remember, you do not need to run 'doom
 sync' after modifying this file!
+
+#+BEGIN_SRC emacs-lisp
+;; -*- lexical-binding: t -*-
+#+END_SRC
 
 Here are some additional functions/macros that could help you configure Doom:
 
@@ -691,17 +725,27 @@ Finally, we need to specify the ~load-path~ so emacs finds the executable.
 #+begin_src emacs-lisp
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 #+end_src
+
 ** ~org-mode~
+*** Setup TODO items
 #+begin_src emacs-lisp
 (setq org-directory "~/org/"
       org-todo-keywords '((type "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
-      org-toto-keyword-faces
+      org-todo-keyword-faces
       '(("TODO" :inherit 'font-lock-string-face :italic italic)
         ("DONE" :inherit 'font-lock-method-face))
 
       ;; Set files to scan for todos
       org-agenda-files (ignore-errors (directory-files +org-dir t "\\.org$" t)))
 #+end_src
+
+*** Automatic TOC on save
+Let's automatically add missing sections to the TOC header on save with =org-make-toc=
+#+begin_src emacs-lisp
+(use-package org-make-toc
+  :hook (org-mode . org-make-toc-mode))
+#+end_src
+
 ** TODO ~pass~
 Write functions
 #+begin_src emacs-lisp

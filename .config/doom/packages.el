@@ -71,3 +71,4 @@
 (package! all-the-icons-dired)
 (package! emms)
 (package! yaml-mode)
+(package! org-make-toc)
