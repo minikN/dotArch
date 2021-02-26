@@ -524,18 +524,26 @@ Configure the styling for on the fly error reporting with ~flycheck~
 - run ~npm install~
 - run ~npm run compile~
 - run ~npm install -g eslint~
-- set this
-#+begin_src emacs-lisp
-;; (setq lsp-eslint-server-command
-;;       '("node"
-;;         "/home/db/.local/share/git/vscode-eslint/server/out/eslintServer.js"
-;;         ;(concat lsp-eslint-unzipped-path "/extension/server/out/eslintServer.js")
-;;         "--stdio"))
-#+end_src
 See also: https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
 
 *** Frontend Web development
 This includes configuration for frontend web development. Namely =npm=, =typescript=, =javascript=.
+
+Filter diagnostics coming from =typescript-language-server= in favor of =eslint= diagnostics
+#+begin_src emacs-lisp
+(with-eval-after-load 'lsp-mode
+  (lsp-defun db/filter-typescript ((params &as &PublishDiagnosticsParams :diagnostics)
+                                   _workspace)
+             (lsp:set-publish-diagnostics-params-diagnostics
+              params
+              (or (seq-filter (-lambda ((&Diagnostic :source? :severity?))
+                                (and (not (string= "typescript" source?))
+                                     (< severity? lsp/diagnostic-severity-information)))
+                              diagnostics)
+                  []))
+             params)
+  (setq lsp-diagnostic-filter 'db/filter-typescript))
+#+end_src
 
 Map =M-C-P= to =lsp-eslint-fix-all= in all typescript buffers.
 #+begin_src emacs-lisp
