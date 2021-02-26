@@ -20,6 +20,3 @@ zsh/.zcompdump
 
 !X11/
 !X11/**
-
-!emacs/
-!emacs/**
