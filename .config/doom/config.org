@@ -14,13 +14,21 @@ This is the main user configuration for my DOOM Emacs setup.
   - [[#keybindings][Keybindings]]
 - [[#user-interface][User Interface]]
 - [[#system][System]]
+  - [[#interactive-power-menu][Interactive power menu]]
+  - [[#exwm][EXWM]]
+  - [[#randr][randr]]
+  - [[#polybar][polybar]]
+  - [[#edwina-masterstack-layout][edwina (master/stack layout)]]
 - [[#ide][IDE]]
+  - [[#lsp-global-key-bindings][LSP global key bindings]]
   - [[#lsp-ui][lsp-ui]]
   - [[#lsp-treemacs][lsp-treemacs]]
   - [[#flycheck][flycheck]]
-  - [[#language-specific][Language specific]]
-    - [[#eslint][eslint]]
-    - [[#frontend-web-development][Frontend Web development]]
+  - [[#languages][Languages]]
+    - [[#jstsnpm][JS/TS/NPM]]
+      - [[#general-settings][General settings]]
+      - [[#key-bindings][Key bindings]]
+      - [[#eslint][eslint]]
 - [[#doom][DOOM]]
 - [[#application-specific-configuration][Application specific configuration]]
   - [[#counsel][counsel]]
@@ -41,13 +49,11 @@ This is the main user configuration for my DOOM Emacs setup.
 * General
 Place your private configuration here! Remember, you do not need to run 'doom
 sync' after modifying this file!
-
 #+BEGIN_SRC emacs-lisp
 ;; -*- lexical-binding: t -*-
 #+END_SRC
 
 Here are some additional functions/macros that could help you configure Doom:
-
 #+begin_src emacs-lisp
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package' for configuring packages
@@ -186,7 +192,7 @@ We need to export all the theme specific colors so we can use it outside of emac
 * System
 This configuration is platform-specific. Mind the ~:tangle~ condition in each code block.
 
-
+** Interactive power menu
 This is an interactive function for shutdown, reboot and sleep. It will get bound to
 the power button later.
 #+begin_src emacs-lisp
@@ -206,6 +212,7 @@ the power button later.
                    (shell-command "zzz"))))))))
 #+end_src
 
+** EXWM
 Setting up ~exwm~ as a window manager.
 #+begin_src emacs-lisp
 (unless IS-WINDOWS
@@ -383,6 +390,7 @@ Setting up ~exwm~ as a window manager.
     (exwm-enable)))
 #+end_src
 
+** randr
 We need to configure ~randr~ for multiple monitor support.
 #+begin_src emacs-lisp
 (unless IS-WINDOWS
@@ -406,6 +414,7 @@ We need to configure ~randr~ for multiple monitor support.
   (exwm-randr-enable))
 #+end_src
 
+** polybar
 ~polybar~ needs some configuration to show the current exwm workspace correctly.
 #+begin_src emacs-lisp
 (unless IS-WINDOWS
@@ -470,6 +479,7 @@ Reload ~polybar~ if the theme changes.
   (advice-add 'enable-theme :after #'db/start-panel))
 #+end_src
 
+** edwina (master/stack layout)
 Set up window manager with ~edwina~ for a master/stack layout.
 #+begin_src emacs-lisp
 (use-package! edwina
@@ -486,7 +496,7 @@ General settings for ~lsp-mode~
         lsp-file-watch-threshold 10000))
 #+end_src
 
-Key bindings for lsp mode
+** LSP global key bindings
 #+begin_src emacs-lisp
 (map! (:after lsp-mode :map lsp-mode-map "<M-return>" 'lsp-execute-code-action)
       :leader
@@ -550,18 +560,10 @@ Configure the styling for on the fly error reporting with ~flycheck~
     `(flycheck-info :underline ,THEME_YELLOW :background ,THEME_BG)))
 #+end_src
 
-** Language specific
-*** ~eslint~
- Install eslint
-- Clone https://github.com/microsoft/vscode-eslint
-- run ~npm install~
-- run ~npm run compile~
-- run ~npm install -g eslint~
-See also: https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
-
-*** Frontend Web development
+** Languages
+*** JS/TS/NPM
 This includes configuration for frontend web development. Namely =npm=, =typescript=, =javascript=.
-
+**** General settings
 Filter diagnostics coming from =typescript-language-server= in favor of =eslint= diagnostics
 #+begin_src emacs-lisp
 (with-eval-after-load 'lsp-mode
@@ -578,6 +580,7 @@ Filter diagnostics coming from =typescript-language-server= in favor of =eslint=
   (setq lsp-diagnostic-filter 'db/filter-typescript))
 #+end_src
 
+**** Key bindings
 Map =M-C-P= to =lsp-eslint-fix-all= in all typescript buffers.
 #+begin_src emacs-lisp
 (map! :map (typescript-mode-map typescript-tsx-mode-map)
@@ -664,6 +667,14 @@ Map all the localleader key bindings for js and ts buffers.
        :desc "Wrap"                     "w"     #'web-mode-element-wrap
                 ))
 #+end_src
+
+**** ~eslint~
+ Install eslint
+- Clone https://github.com/microsoft/vscode-eslint
+- run ~npm install~
+- run ~npm run compile~
+- run ~npm install -g eslint~
+See also: https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
 
 * DOOM
 When using ~SPC-b-B~, I want to see all buffers, not only workspace buffers.
