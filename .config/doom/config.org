@@ -186,10 +186,11 @@ We need to export all the theme specific colors so we can use it outside of emac
 * System
 This configuration is platform-specific. Mind the ~:tangle~ condition in each code block.
 
+
 This is an interactive function for shutdown, reboot and sleep. It will get bound to
 the power button later.
 #+begin_src emacs-lisp
-(unless (string-match "-[Mm]icrosoft" operating-system-release)
+(unless IS-WINDOWS
   (defun db/power-menu ()
     "Interactive menu for shutdown, reboot or sleep."
     (interactive)
@@ -207,7 +208,7 @@ the power button later.
 
 Setting up ~exwm~ as a window manager.
 #+begin_src emacs-lisp
-(unless (string-match "-[Mm]icrosoft" operating-system-release)
+(unless IS-WINDOWS
   (server-start)
 
   (defun db/run-in-background (command)
@@ -384,7 +385,7 @@ Setting up ~exwm~ as a window manager.
 
 We need to configure ~randr~ for multiple monitor support.
 #+begin_src emacs-lisp
-(unless (string-match "-[Mm]icrosoft" operating-system-release)
+(unless IS-WINDOWS
   (require 'exwm-randr)
 
   (setq exwm-randr-workspace-monitor-plist
@@ -407,7 +408,7 @@ We need to configure ~randr~ for multiple monitor support.
 
 ~polybar~ needs some configuration to show the current exwm workspace correctly.
 #+begin_src emacs-lisp
-(unless (string-match "-[Mm]icrosoft" operating-system-release)
+(unless IS-WINDOWS
   (defvar db/polybar-left-process nil
     "Holds the process of the running Polybar (left) instance, if any")
 
@@ -465,7 +466,7 @@ We need to configure ~randr~ for multiple monitor support.
 
 Reload ~polybar~ if the theme changes.
 #+begin_src emacs-lisp
-(unless (string-match "-[Mm]icrosoft" operating-system-release)
+(unless IS-WINDOWS
   (advice-add 'enable-theme :after #'db/start-panel))
 #+end_src
 
