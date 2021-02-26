@@ -452,10 +452,11 @@ General settings for ~lsp-mode~
 #+end_src
 
 Key bindings for lsp mode
-
 #+begin_src emacs-lisp
-(eval-after-load 'lsp-mode
-                    '(define-key lsp-mode-map (kbd "<M-return>") 'lsp-execute-code-action))
+(map! (:after lsp-mode :map lsp-mode-map "<M-return>" 'lsp-execute-code-action)
+      :leader
+      :desc "Show documentation"                "c K"   'lsp-ui-doc-show
+      :desc "Toggle Symbols"                    "c S"   #'db/lsp-treemacs-symbols-toggle)
 #+end_src
 
 ** ~lsp-ui~
@@ -502,11 +503,8 @@ Let's toggle the symbols sidebar with a function
       (kill-buffer "*LSP Symbols List*")
     (progn (lsp-treemacs-symbols)
            (other-window -1))))
-
-;; bind lsp-treemacs toggle
-(map! :leader
-      :desc "Toggle Symbols" "c S" #'db/lsp-treemacs-symbols-toggle)
 #+end_src
+
 ** ~flycheck~
 Configure the styling for on the fly error reporting with ~flycheck~
 #+begin_src emacs-lisp
@@ -631,8 +629,6 @@ Map all the localleader key bindings for js and ts buffers.
        :desc "Wrap"                     "w"     #'web-mode-element-wrap
                 ))
 #+end_src
-
-#+RESULTS:
 
 * DOOM
 When using ~SPC-b-B~, I want to see all buffers, not only workspace buffers.
